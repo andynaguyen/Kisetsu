@@ -9,14 +9,18 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 // Kisetsu
 // 季節
 public class SeasonsActivity extends AppCompatActivity {
     // constants
     private static final String TAG = "SeasonsActivity";
-    private static final int MAX_SEASONS = 4;
+    private static final int NUM_SEASONS = 7;
+    private static final int YEAR_LENGTH = 12;
+    private static final int SEASON_LENGTH = 3;
 
     // fields
     private ArrayList<SeasonItem> seasons;
@@ -53,13 +57,25 @@ public class SeasonsActivity extends AppCompatActivity {
     private void initSeasons() {
         seasons = new ArrayList<SeasonItem>();
 
-        // TODO: Make it determine which seasons to list using the date
-        Season[] catalog = { Season.SUMMER, Season.FALL, Season.WINTER, Season.SPRING};
-        int[] years = { 2016, 2016, 2017, 2017 };
+        // Retrieve current month and year
+        Calendar cal = Calendar.getInstance();
+        int month = cal.get(Calendar.MONTH) + 1;
+        int year = cal.get(Calendar.YEAR);
 
-        for (int i = 0; i < MAX_SEASONS; i++) {
-            SeasonItem seasonData = new SeasonItem(catalog[i], years[i]);
-            seasons.add(seasonData);
+        // Calculate what the month/year will be in 3 months
+        int nextSeasonMonth = month + SEASON_LENGTH;
+        int nextSeasonYear = year;
+
+        if (nextSeasonMonth > YEAR_LENGTH) {
+            nextSeasonMonth = nextSeasonMonth % YEAR_LENGTH;
+            nextSeasonYear++;
+        }
+
+        // Create SeasonItems starting from next season and going backwards,
+        // until NUM_SEASONS objects have been created
+        SeasonItem currSeason = new SeasonItem(nextSeasonMonth, nextSeasonYear);
+        for (int i = 0; i < NUM_SEASONS; currSeason = currSeason.getPrevSeason(), i++) {
+            seasons.add(currSeason);
         }
     }
 }

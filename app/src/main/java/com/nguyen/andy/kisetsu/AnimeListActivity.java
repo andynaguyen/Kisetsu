@@ -17,6 +17,8 @@ public class AnimeListActivity extends AppCompatActivity {
         String seasonJson = bundle.getString("SeasonItem");
         SeasonItem seasonData = SeasonItem.fromJson(seasonJson);
 
+        setTitle(seasonData.getName());
+
         TextView jsonTV = (TextView) findViewById(R.id.json_text);
         jsonTV.setText(seasonJson);
 

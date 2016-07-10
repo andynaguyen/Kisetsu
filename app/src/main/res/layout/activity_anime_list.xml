@@ -9,25 +9,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.nguyen.andy.kisetsu.AnimeListActivity">
 
-    <!--TextView
-        android:id="@+id/json_text"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="12dp"/>
-
-    <TextView
-        android:id="@+id/season_item_text"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="12dp"/>
-
-    <TextView
-        android:id="@+id/season_toString"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="12dp"/-->
-
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
