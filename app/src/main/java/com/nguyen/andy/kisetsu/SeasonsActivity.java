@@ -1,19 +1,21 @@
 package com.nguyen.andy.kisetsu;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
+
 // Kisetsu
 // 季節
-public class MainActivity extends AppCompatActivity {
+public class SeasonsActivity extends AppCompatActivity {
     // constants
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "SeasonsActivity";
     private static final int MAX_SEASONS = 4;
 
     // fields
@@ -25,18 +27,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_seasons);
         setTitle("Kisetsu");
 
         initSeasons();
 
-        final ListView seasonsView = (ListView) findViewById(R.id.seasons_list);
-        seasonsView.setAdapter(new CustomListAdapter(this, seasons));
-        seasonsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        final ListView seasonsListView = (ListView) findViewById(R.id.seasons_list);
+        seasonsListView.setAdapter(new CustomListAdapter(this, seasons));
+        seasonsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SeasonItem seasonData = (SeasonItem) seasonsView.getItemAtPosition(position);
-                Toast.makeText(MainActivity.this, "Selected : " + seasonData, Toast.LENGTH_LONG);
+                SeasonItem seasonData = (SeasonItem) seasonsListView.getItemAtPosition(position);
+                String seasonJson = seasonData.toJson();
+
+                Toast.makeText(getApplicationContext(), seasonJson, Toast.LENGTH_LONG).show();
+
+                Intent intent = new Intent(getApplicationContext(), AnimeListActivity.class);
+                intent.putExtra("SeasonItem",seasonJson);
+
+                startActivity(intent);
             }
         });
     }

@@ -1,5 +1,7 @@
 package com.nguyen.andy.kisetsu;
 
+import com.google.gson.Gson;
+
 /**
  * Created by Andy on 7/7/2016.
  */
@@ -61,5 +63,20 @@ public class SeasonItem {
 
     public void setTimeframe(String timeframe) {
         this.timeframe = timeframe;
+    }
+
+    @Override
+    public String toString() {
+        return this.name + " from " + this.timeframe;
+    }
+
+    public String toJson() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
+
+    public static SeasonItem fromJson(String json) {
+        Gson gson = new Gson();
+        return gson.fromJson(json, SeasonItem.class);
     }
 }

@@ -76,25 +76,25 @@ public class CustomListAdapter extends BaseAdapter {
             case SUMMER:
                 Drawable summerIcon = ResourcesCompat.getDrawable(iconResources, R.drawable.summer_icon, null);
                 holder.iconView.setImageDrawable(summerIcon);
-                Log.d("season", "Summer");
+                //Log.d("season", "Summer");
                 break;
             case FALL:
                 Drawable fallIcon = ResourcesCompat.getDrawable(iconResources, R.drawable.fall_icon, null);
                 holder.iconView.setImageDrawable(fallIcon);
-                Log.d("season", "Fall");
+                //Log.d("season", "Fall");
                 break;
             case WINTER:
                 Drawable winterIcon = ResourcesCompat.getDrawable(iconResources, R.drawable.winter_icon, null);
                 holder.iconView.setImageDrawable(winterIcon);
-                Log.d("season", "Winter");
+                //Log.d("season", "Winter");
                 break;
             case SPRING:
                 Drawable springIcon = ResourcesCompat.getDrawable(iconResources, R.drawable.spring_icon, null);
                 holder.iconView.setImageDrawable(springIcon);
-                Log.d("season", "Spring");
+                //Log.d("season", "Spring");
                 break;
             default:
-                Log.d("season","WHY IS THIS NULL");
+                //Log.d("season","WHY IS THIS NULL");
                 Drawable placeholderIcon = ResourcesCompat.getDrawable(iconResources, R.drawable.spring_icon, null);
                 holder.iconView.setImageDrawable(placeholderIcon);
                 break;
