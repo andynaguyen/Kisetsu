@@ -9,7 +9,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -42,12 +41,13 @@ public class SeasonsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 SeasonItem seasonData = (SeasonItem) seasonsListView.getItemAtPosition(position);
-                String seasonJson = seasonData.toJson();
+                //String seasonJson = seasonData.toJson();
 
-                Toast.makeText(getApplicationContext(), seasonJson, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), seasonJson, Toast.LENGTH_LONG).show();
 
                 Intent intent = new Intent(getApplicationContext(), AnimeListActivity.class);
-                intent.putExtra("SeasonItem",seasonJson);
+                intent.putExtra("Season", seasonData.getSeason().toString());
+                intent.putExtra("Year", seasonData.getYear());
 
                 startActivity(intent);
             }
@@ -78,4 +78,7 @@ public class SeasonsActivity extends AppCompatActivity {
             seasons.add(currSeason);
         }
     }
+
+
+
 }

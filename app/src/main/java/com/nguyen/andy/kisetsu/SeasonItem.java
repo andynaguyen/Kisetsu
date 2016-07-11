@@ -1,7 +1,5 @@
 package com.nguyen.andy.kisetsu;
 
-import com.google.gson.Gson;
-
 import java.util.HashMap;
 
 /**
@@ -20,7 +18,6 @@ public class SeasonItem {
     private static final int YEAR_LENGTH = 12;
     private static final int SEASON_LENGTH = 3;
 
-
     static {
         MONTH_TO_SEASON = new HashMap<Integer, Season>();
         MONTH_TO_SEASON.put(1, Season.WINTER);
@@ -37,18 +34,11 @@ public class SeasonItem {
         MONTH_TO_SEASON.put(12, Season.WINTER);
     }
 
-    // These fields have public accessors
     private String name;
     private Season season;
     private String timeframe;
-
-    // These fields don't have accessors
     private int month;
     private int year;
-
-    public SeasonItem() {
-        // empty
-    }
 
     public SeasonItem(int month, int year){
         this.month = month;
@@ -104,6 +94,10 @@ public class SeasonItem {
         this.season = season;
     }
 
+    public int getYear() {
+        return this.year;
+    }
+
     /***** END OF PUBLIC ACCESSORS *****/
 
     /*
@@ -126,15 +120,5 @@ public class SeasonItem {
     @Override
     public String toString() {
         return this.name + " from " + this.timeframe;
-    }
-
-    public String toJson() {
-        Gson gson = new Gson();
-        return gson.toJson(this);
-    }
-
-    public static SeasonItem fromJson(String json) {
-        Gson gson = new Gson();
-        return gson.fromJson(json, SeasonItem.class);
     }
 }
