@@ -48,23 +48,23 @@ public class SeasonItem {
         switch (this.season) {
             case SUMMER:
                 this.name = "Summer " + year;
-                this.setTimeframe("June " + year + " to Aug " + year);
+                this.timeframe = "June " + year + " to Aug " + year;
                 break;
             case FALL:
                 this.name = "Fall " + year;
-                this.setTimeframe("Sept " + year + " to Nov " + year);
+                this.timeframe = "Sept " + year + " to Nov " + year;
                 break;
             case WINTER:
                 this.name = "Winter " + year;
-                this.setTimeframe("Dec " + (year - 1) + " to Feb " + year);
+                this.timeframe = "Dec " + (year - 1) + " to Feb " + year;
                 break;
             case SPRING:
                 this.name = "Spring " + year;
-                this.setTimeframe("Mar " + year + " to May " + year);
+                this.timeframe = "Mar " + year + " to May " + year;
                 break;
             default:
                 this.name = "WHY";
-                this.setTimeframe("IS THIS HAPPENING");
+                this.timeframe = "IS THIS HAPPENING";
                 break;
         }
     }
@@ -74,30 +74,17 @@ public class SeasonItem {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getTimeframe() {
         return timeframe;
-    }
-
-    public void setTimeframe(String timeframe) {
-        this.timeframe = timeframe;
     }
 
     public Season getSeason() {
         return season;
     }
 
-    public void setSeason(Season season) {
-        this.season = season;
-    }
-
     public int getYear() {
         return this.year;
     }
-
     /***** END OF PUBLIC ACCESSORS *****/
 
     /*
