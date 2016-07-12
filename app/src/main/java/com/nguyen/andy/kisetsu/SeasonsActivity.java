@@ -24,9 +24,6 @@ public class SeasonsActivity extends AppCompatActivity {
     // fields
     private ArrayList<SeasonItem> seasons;
 
-    // TODO: Make method to get season from data
-    // TODO: Open a new activity on item click
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,14 +37,14 @@ public class SeasonsActivity extends AppCompatActivity {
         seasonsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SeasonItem seasonData = (SeasonItem) seasonsListView.getItemAtPosition(position);
+                SeasonItem seasonItem = (SeasonItem) seasonsListView.getItemAtPosition(position);
                 //String seasonJson = seasonData.toJson();
 
                 //Toast.makeText(getApplicationContext(), seasonJson, Toast.LENGTH_LONG).show();
 
                 Intent intent = new Intent(getApplicationContext(), AnimeListActivity.class);
-                intent.putExtra("Season", seasonData.getSeason().toString());
-                intent.putExtra("Year", seasonData.getYear());
+                intent.putExtra("Season", seasonItem.getSeason().toString());
+                intent.putExtra("Year", seasonItem.getYear());
 
                 startActivity(intent);
             }

@@ -1,9 +1,13 @@
 package com.nguyen.andy.kisetsu;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,13 +16,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class AnimeListActivity extends AppCompatActivity {
     private static final String MAL_PREFIX_URL = "http://myanimelist.net/anime/season/";
+    //ArrayList<String> titles;
+    ProgressDialog progessDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,18 +39,10 @@ public class AnimeListActivity extends AppCompatActivity {
                 season.substring(0,1).toUpperCase() + season.substring(1).toLowerCase() + " " + year;
         setTitle(title);
 
-        // URL FORMAT: PREFIX + SEASON (in lowercase) + '/' + YEAR
-        StringBuilder url = new StringBuilder();
-        url.append(MAL_PREFIX_URL);
-        url.append(season.toLowerCase());
-        url.append('/');
-        url.append(year);
+        String url = buildURL(season, year);
+        //Log.d("url", url);
 
-
-        /*Document doc = getDocumentFromUrl(url.toString());
-        if (doc != null) {
-            initGrid(doc);
-        }*/
+        new ParseURLTask().execute(url);
     }
 
     private void initGrid(Document doc) {
@@ -53,6 +50,17 @@ public class AnimeListActivity extends AppCompatActivity {
         for (Element title : titles) {
             Log.d("gridUI", title.text());
         }
+    }
+
+    private String buildURL(String season, int year) {
+        // URL FORMAT: PREFIX + SEASON (in lowercase) + '/' + YEAR
+        StringBuilder url = new StringBuilder();
+        url.append(MAL_PREFIX_URL);
+        url.append(year);
+        url.append('/');
+        url.append(season.toLowerCase());
+
+        return url.toString();
     }
 
     private Document getDocumentFromUrl(String url) {
@@ -66,5 +74,45 @@ public class AnimeListActivity extends AppCompatActivity {
             return null;
         }
         return doc;
+    }
+
+    private class ParseURLTask extends AsyncTask<String, Void, Document> {
+        String testUrl = "http://myanimelist.net/anime/season/2017/winter";
+
+        @Override
+        protected Document doInBackground(String... params) {
+            Document doc = null;
+            try {
+                doc = Jsoup.connect(testUrl).get();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return doc;
+        }
+
+        @Override
+        protected void onPostExecute(Document html) {
+            Elements images = html.select("img");
+
+            String allTitles = "";
+
+            for (Element image : images) {
+                allTitles += image.attr("alt") + "\n";
+            }
+
+            Log.d("len", "SB: " + allTitles);
+            progessDialog.dismiss();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progessDialog = new ProgressDialog(AnimeListActivity.this);
+            progessDialog.setTitle("Fetching data");
+            progessDialog.setMessage("Loading...");
+            progessDialog.setIndeterminate(false);
+            progessDialog.show();
+        }
     }
 }
