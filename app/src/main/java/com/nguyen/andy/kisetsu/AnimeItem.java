@@ -1,5 +1,7 @@
 package com.nguyen.andy.kisetsu;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 /**
@@ -51,4 +53,13 @@ public class AnimeItem {
 
     }
 
+    public String toJson() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
+
+    public static AnimeItem fromJson(String json) {
+        Gson gson = new Gson();
+        return gson.fromJson(json, AnimeItem.class);
+    }
 }
