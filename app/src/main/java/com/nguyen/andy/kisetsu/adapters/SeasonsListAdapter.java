@@ -1,10 +1,9 @@
-package com.nguyen.andy.kisetsu;
+package com.nguyen.andy.kisetsu.adapters;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +12,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import com.nguyen.andy.kisetsu.SeasonItem;
+import com.nguyen.andy.kisetsu.R;
 /**
  * Created by Andy on 7/7/2016.
  */
-public class CustomListAdapter extends BaseAdapter {
+public class SeasonsListAdapter extends BaseAdapter {
     ArrayList<SeasonItem> seasonList;
     private LayoutInflater layoutInflater;
 
-    public CustomListAdapter(Context context,ArrayList<SeasonItem> seasonData) {
+    public SeasonsListAdapter(Context context, ArrayList<SeasonItem> seasonData) {
         this.seasonList = seasonData;
         layoutInflater = LayoutInflater.from(context);
     }
@@ -73,22 +75,22 @@ public class CustomListAdapter extends BaseAdapter {
 
         // Get the imageView set to the appropriate season icon
         switch (seasonList.get(position).getSeason()) {
-            case SUMMER:
+            case SeasonItem.SUMMER:
                 Drawable summerIcon = ResourcesCompat.getDrawable(iconResources, R.drawable.summer_icon, null);
                 holder.iconView.setImageDrawable(summerIcon);
                 //Log.d("season", "Summer");
                 break;
-            case FALL:
+            case SeasonItem.FALL:
                 Drawable fallIcon = ResourcesCompat.getDrawable(iconResources, R.drawable.fall_icon, null);
                 holder.iconView.setImageDrawable(fallIcon);
                 //Log.d("season", "Fall");
                 break;
-            case WINTER:
+            case SeasonItem.WINTER:
                 Drawable winterIcon = ResourcesCompat.getDrawable(iconResources, R.drawable.winter_icon, null);
                 holder.iconView.setImageDrawable(winterIcon);
                 //Log.d("season", "Winter");
                 break;
-            case SPRING:
+            case SeasonItem.SPRING:
                 Drawable springIcon = ResourcesCompat.getDrawable(iconResources, R.drawable.spring_icon, null);
                 holder.iconView.setImageDrawable(springIcon);
                 //Log.d("season", "Spring");

@@ -5,10 +5,6 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -18,9 +14,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
-public class AnimeListActivity extends AppCompatActivity {
+public class AnimeCatalogActivity extends AppCompatActivity {
     private static final String MAL_PREFIX_URL = "http://myanimelist.net/anime/season/";
     //ArrayList<String> titles;
     ProgressDialog progessDialog;
@@ -28,7 +23,7 @@ public class AnimeListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_anime_list);
+        setContentView(R.layout.activity_anime_catalog);
 
         Bundle bundle = getIntent().getExtras();
         String season = bundle.getString("Season");
@@ -40,7 +35,6 @@ public class AnimeListActivity extends AppCompatActivity {
         setTitle(title);
 
         String url = buildURL(season, year);
-        //Log.d("url", url);
 
         new ParseURLTask().execute(url);
     }
@@ -80,6 +74,16 @@ public class AnimeListActivity extends AppCompatActivity {
         String testUrl = "http://myanimelist.net/anime/season/2017/winter";
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progessDialog = new ProgressDialog(AnimeCatalogActivity.this);
+            progessDialog.setTitle("Fetching data");
+            progessDialog.setMessage("Loading...");
+            progessDialog.setIndeterminate(false);
+            progessDialog.show();
+        }
+
+        @Override
         protected Document doInBackground(String... params) {
             Document doc = null;
             try {
@@ -103,16 +107,6 @@ public class AnimeListActivity extends AppCompatActivity {
 
             Log.d("len", "SB: " + allTitles);
             progessDialog.dismiss();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progessDialog = new ProgressDialog(AnimeListActivity.this);
-            progessDialog.setTitle("Fetching data");
-            progessDialog.setMessage("Loading...");
-            progessDialog.setIndeterminate(false);
-            progessDialog.show();
         }
     }
 }

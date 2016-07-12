@@ -3,20 +3,20 @@ package com.nguyen.andy.kisetsu;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import com.nguyen.andy.kisetsu.adapters.SeasonsListAdapter;
+
 // Kisetsu
 // 季節
-public class SeasonsActivity extends AppCompatActivity {
+public class SeasonsCatalogActivity extends AppCompatActivity {
     // constants
-    private static final String TAG = "SeasonsActivity";
+    private static final String TAG = "SeasonsCatalogActivity";
     private static final int NUM_SEASONS = 7;
     private static final int YEAR_LENGTH = 12;
     private static final int SEASON_LENGTH = 3;
@@ -27,13 +27,13 @@ public class SeasonsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_seasons);
+        setContentView(R.layout.activity_seasons_catalog);
         setTitle("Kisetsu");
 
         initSeasons();
 
-        final ListView seasonsListView = (ListView) findViewById(R.id.seasons_list);
-        seasonsListView.setAdapter(new CustomListAdapter(this, seasons));
+        final ListView seasonsListView = (ListView) findViewById(R.id.seasons_catalog);
+        seasonsListView.setAdapter(new SeasonsListAdapter(this, seasons));
         seasonsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -42,8 +42,8 @@ public class SeasonsActivity extends AppCompatActivity {
 
                 //Toast.makeText(getApplicationContext(), seasonJson, Toast.LENGTH_LONG).show();
 
-                Intent intent = new Intent(getApplicationContext(), AnimeListActivity.class);
-                intent.putExtra("Season", seasonItem.getSeason().toString());
+                Intent intent = new Intent(getApplicationContext(), AnimeCatalogActivity.class);
+                intent.putExtra("Season", seasonItem.getSeason());
                 intent.putExtra("Year", seasonItem.getYear());
 
                 startActivity(intent);

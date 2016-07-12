@@ -7,35 +7,33 @@ import java.util.HashMap;
  */
 
 public class SeasonItem {
-    enum Season {
-        SUMMER,
-        FALL,
-        WINTER,
-        SPRING
-    }
+    public static final String SUMMER = "Summer";
+    public static final String FALL   = "Fall";
+    public static final String WINTER = "Winter";
+    public static final String SPRING = "Spring";
 
-    public static final HashMap<Integer, Season> MONTH_TO_SEASON;
+    public static final HashMap<Integer, String> MONTH_TO_SEASON;
     private static final int YEAR_LENGTH = 12;
     private static final int SEASON_LENGTH = 3;
 
     static {
-        MONTH_TO_SEASON = new HashMap<Integer, Season>();
-        MONTH_TO_SEASON.put(1, Season.WINTER);
-        MONTH_TO_SEASON.put(2, Season.WINTER);
-        MONTH_TO_SEASON.put(3, Season.SPRING);
-        MONTH_TO_SEASON.put(4, Season.SPRING);
-        MONTH_TO_SEASON.put(5, Season.SPRING);
-        MONTH_TO_SEASON.put(6, Season.SUMMER);
-        MONTH_TO_SEASON.put(7, Season.SUMMER);
-        MONTH_TO_SEASON.put(8, Season.SUMMER);
-        MONTH_TO_SEASON.put(9, Season.FALL);
-        MONTH_TO_SEASON.put(10, Season.FALL);
-        MONTH_TO_SEASON.put(11, Season.FALL);
-        MONTH_TO_SEASON.put(12, Season.WINTER);
+        MONTH_TO_SEASON = new HashMap<Integer, String>();
+        MONTH_TO_SEASON.put(1, WINTER);
+        MONTH_TO_SEASON.put(2, WINTER);
+        MONTH_TO_SEASON.put(3, SPRING);
+        MONTH_TO_SEASON.put(4, SPRING);
+        MONTH_TO_SEASON.put(5, SPRING);
+        MONTH_TO_SEASON.put(6, SUMMER);
+        MONTH_TO_SEASON.put(7, SUMMER);
+        MONTH_TO_SEASON.put(8, SUMMER);
+        MONTH_TO_SEASON.put(9, FALL);
+        MONTH_TO_SEASON.put(10, FALL);
+        MONTH_TO_SEASON.put(11, FALL);
+        MONTH_TO_SEASON.put(12, WINTER);
     }
 
     private String name;
-    private Season season;
+    private String season;
     private String timeframe;
     private int month;
     private int year;
@@ -78,7 +76,7 @@ public class SeasonItem {
         return timeframe;
     }
 
-    public Season getSeason() {
+    public String getSeason() {
         return season;
     }
 

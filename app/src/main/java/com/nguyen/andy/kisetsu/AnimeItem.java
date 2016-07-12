@@ -16,7 +16,7 @@ public class AnimeItem {
         SPECIAL
     }
 
-    private String name;
+    private String title;
     private String imageUrl;
     private String snyopsis;
     private ArrayList<String> genres;
@@ -24,8 +24,8 @@ public class AnimeItem {
     private int numEps;
 
     /***** PUBLIC ACCESSORS *****/
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     public String getImageUrl() {
