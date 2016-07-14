@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 
@@ -14,6 +16,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
+import com.nguyen.andy.kisetsu.adapters.AnimeListAdapter;
 
 public class AnimeCatalogActivity extends AppCompatActivity {
     private static final String MAL_PREFIX_URL = "http://myanimelist.net/anime/season/";
@@ -99,13 +104,21 @@ public class AnimeCatalogActivity extends AppCompatActivity {
         protected void onPostExecute(Document html) {
             Elements images = html.select("img");
 
-            String allTitles = "";
+            ArrayList<AnimeItem> animeItems = new ArrayList<AnimeItem>();
 
             for (Element image : images) {
-                allTitles += image.attr("alt") + "\n";
+                AnimeItem tempItem = new AnimeItem(image.attr("alt"));
+                animeItems.add(tempItem);
+//                animeTitles.add(image.attr("alt"));
             }
 
-            Log.d("len", "SB: " + allTitles);
+            final GridView animeListView = (GridView) findViewById(R.id.anime_catalog);
+            animeListView.setAdapter(new AnimeListAdapter(getApplicationContext(), animeItems));
+            // TODO: Parse other needed elements for AnimeItem and needed for this activity
+            // For item: img url, synopsis, studio, epcount, genre(s)
+            // For gridview: img url
+
+            //Log.d("len", "SB: " + allTitles);
             progessDialog.dismiss();
         }
     }

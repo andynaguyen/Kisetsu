@@ -23,6 +23,10 @@ public class AnimeItem {
     private MediaType mediaType;
     private int numEps;
 
+    public AnimeItem(String title) {
+        this.title = title;
+    }
+
     /***** PUBLIC ACCESSORS *****/
     public String getTitle() {
         return title;

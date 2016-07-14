@@ -20,11 +20,36 @@ import com.nguyen.andy.kisetsu.R;
  */
 public class SeasonsListAdapter extends BaseAdapter {
     // Id's for drawable resources (icons)
-    private static final int FALL_ICON_ID = R.drawable.fall_blue;
-    private static final int SUMMER_ICON_ID = R.drawable.summer_blue;
-    private static final int SPRING_ICON_ID = R.drawable.spring_blue;
-    private static final int WINTER_ICON_ID = R.drawable.winter_blue;
+    private static final int FALL_ICON_ID;
+    private static final int SUMMER_ICON_ID;
+    private static final int SPRING_ICON_ID;
+    private static final int WINTER_ICON_ID;
     private static final int PLACEHOLDER_ICON_ID = R.drawable.base_icon;
+
+    static {
+        int num = 0 ;
+
+        switch (num) {
+            case 0:
+                FALL_ICON_ID = R.drawable.fall_match;
+                SUMMER_ICON_ID = R.drawable.summer_match;
+                WINTER_ICON_ID = R.drawable.winter_match;
+                SPRING_ICON_ID = R.drawable.spring_match;
+                break;
+            case 1:
+                FALL_ICON_ID = R.drawable.fall_orange;
+                SUMMER_ICON_ID = R.drawable.summer_yellow;
+                WINTER_ICON_ID = R.drawable.winter_blue;
+                SPRING_ICON_ID = R.drawable.spring_green;
+                break;
+            default:
+                FALL_ICON_ID = R.drawable.fall_blu;
+                SUMMER_ICON_ID = R.drawable.summer_blu;
+                WINTER_ICON_ID = R.drawable.winter_blu;
+                SPRING_ICON_ID = R.drawable.string_blu;
+                break;
+        }
+    }
 
     ArrayList<SeasonItem> seasonList;
     private LayoutInflater layoutInflater;
@@ -51,7 +76,7 @@ public class SeasonsListAdapter extends BaseAdapter {
     }
 
     /*
-     * Returns unique int id representing each row item in the ListView.
+     * Returns unique numeric id representing each row item in the ListView.
      */
     @Override
     public long getItemId(int position) {
@@ -61,6 +86,7 @@ public class SeasonsListAdapter extends BaseAdapter {
     /*
      * Returns a view instance that representing a single row in the ListView.
      */
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
