@@ -1,30 +1,18 @@
 package com.nguyen.andy.kisetsu;
 
-import com.google.gson.Gson;
-
-import java.util.ArrayList;
-
 /**
  * Created by Andy on 7/12/2016.
  */
 public class AnimeItem {
-    enum MediaType {
-        TV,
-        ONA,
-        OVA,
-        MOVIE,
-        SPECIAL
-    }
 
     private String title;
     private String imageUrl;
-    private String snyopsis;
-    private ArrayList<String> genres;
-    private MediaType mediaType;
-    private int numEps;
+    private String malURL;
 
-    public AnimeItem(String title) {
+    public AnimeItem(String title, String imageUrl, String malURL) {
         this.title = title;
+        this.imageUrl = imageUrl;
+        this.malURL = malURL;
     }
 
     /***** PUBLIC ACCESSORS *****/
@@ -36,34 +24,8 @@ public class AnimeItem {
         return imageUrl;
     }
 
-    public String getSnyopsis() {
-        return snyopsis;
-    }
-
-    public ArrayList<String> getGenres() {
-        return genres;
-    }
-
-    public MediaType getMediaType() {
-        return mediaType;
-    }
-
-    public int getNumEps() {
-        return numEps;
+    public String getMalURL() {
+        return  malURL;
     }
     /***** END OF PUBLIC ACCESSORS *****/
-
-    public AnimeItem() {
-
-    }
-
-    public String toJson() {
-        Gson gson = new Gson();
-        return gson.toJson(this);
-    }
-
-    public static AnimeItem fromJson(String json) {
-        Gson gson = new Gson();
-        return gson.fromJson(json, AnimeItem.class);
-    }
 }

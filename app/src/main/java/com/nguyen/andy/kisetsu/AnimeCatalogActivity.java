@@ -1,10 +1,14 @@
 package com.nguyen.andy.kisetsu;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -22,8 +26,12 @@ import com.nguyen.andy.kisetsu.adapters.AnimeListAdapter;
 
 public class AnimeCatalogActivity extends AppCompatActivity {
     private static final String MAL_PREFIX_URL = "http://myanimelist.net/anime/season/";
-    //ArrayList<String> titles;
+
     ProgressDialog progessDialog;
+
+    // fields for Intent
+    String season;
+    int year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +39,8 @@ public class AnimeCatalogActivity extends AppCompatActivity {
         setContentView(R.layout.activity_anime_catalog);
 
         Bundle bundle = getIntent().getExtras();
-        String season = bundle.getString("Season");
-        int year = bundle.getInt("Year");
+        season = bundle.getString("Season");
+        year = bundle.getInt("Year");
 
         // ex: "SUMMER" -> "Summer"
         String title =
@@ -102,23 +110,38 @@ public class AnimeCatalogActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Document html) {
+            final ArrayList<AnimeItem> animeItems = new ArrayList<AnimeItem>();
+
+            // Elements of html doc
             Elements images = html.select("img");
+            Elements malUrls = html.select("a[class=box-unit7-btn di-box]"); //box-unit7-btn di-box
 
-            ArrayList<AnimeItem> animeItems = new ArrayList<AnimeItem>();
+            for (int i = 0; i < images.size() && i < malUrls.size(); i++) {
+                String title  = images.get(i).attr("alt");
+                String imgUrl = images.get(i).attr("data-src");
+                String malUrl = malUrls.get(i).attr("href");
 
-            for (Element image : images) {
-                AnimeItem tempItem = new AnimeItem(image.attr("alt"));
-                animeItems.add(tempItem);
-//                animeTitles.add(image.attr("alt"));
+                animeItems.add(new AnimeItem(title, imgUrl, malUrl));
             }
 
-            final GridView animeListView = (GridView) findViewById(R.id.anime_catalog);
-            animeListView.setAdapter(new AnimeListAdapter(getApplicationContext(), animeItems));
-            // TODO: Parse other needed elements for AnimeItem and needed for this activity
-            // For item: img url, synopsis, studio, epcount, genre(s)
-            // For gridview: img url
+            final GridView animeGridView = (GridView) findViewById(R.id.anime_catalog);
+            animeGridView.setAdapter(new AnimeListAdapter(getApplicationContext(), animeItems));
+            animeGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    AnimeItem animeData = (AnimeItem) animeGridView.getItemAtPosition(position);
 
-            //Log.d("len", "SB: " + allTitles);
+                    Intent intent = new Intent(getApplicationContext(), AnimeDetailActivity.class);
+                    intent.putExtra("MalUrl", animeData.getMalURL());
+                    intent.putExtra("ImgUrl", animeData.getImageUrl());
+                    intent.putExtra("Title", animeData.getTitle());
+                    intent.putExtra("SeasonFrom", season);
+                    intent.putExtra("YearFrom", year);
+                    startActivity(intent);
+                }
+            });
+            // TODO: images are 130x194 px
+
             progessDialog.dismiss();
         }
     }

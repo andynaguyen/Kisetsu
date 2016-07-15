@@ -37,14 +37,11 @@ public class SeasonsCatalogActivity extends AppCompatActivity {
         seasonsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SeasonItem seasonItem = (SeasonItem) seasonsListView.getItemAtPosition(position);
-                //String seasonJson = seasonData.toJson();
-
-                //Toast.makeText(getApplicationContext(), seasonJson, Toast.LENGTH_LONG).show();
+                SeasonItem seasonData = (SeasonItem) seasonsListView.getItemAtPosition(position);
 
                 Intent intent = new Intent(getApplicationContext(), AnimeCatalogActivity.class);
-                intent.putExtra("Season", seasonItem.getSeason());
-                intent.putExtra("Year", seasonItem.getYear());
+                intent.putExtra("Season", seasonData.getSeason());
+                intent.putExtra("Year", seasonData.getYear());
 
                 startActivity(intent);
             }
