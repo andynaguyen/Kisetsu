@@ -16,6 +16,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class AnimeDetailActivity extends AppCompatActivity {
     private String malUrl;
@@ -81,23 +82,57 @@ public class AnimeDetailActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Document html) {
             // Elements of html doc
-            Elements images = html.select("img");
-            Elements malUrls = html.select("a[class=box-unit7-btn di-box]"); //box-unit7-btn di-box
+            String synopsis = getSynopsis(html);
+            String score = getScore(html);
+            HashMap<String, String> info = getGeneralInfo(html);
+            String type = info.get("Type");
+            String studios = info.get("Studios");
+            String genres = info.get("Genres");
+            String episodes = info.get("Episodes");
+            String aired = info.get("Aired");
 
-            Log.d("doc", "html file:\n" + html.toString());
-
-            for (int i = 0; i < images.size() && i < malUrls.size(); i++) {
-                String title  = images.get(i).attr("alt");
-                String imgUrl = images.get(i).attr("data-src");
-                String malUrl = malUrls.get(i).attr("href");
-            }
-
-            EditText et = (EditText) findViewById(R.id.edit_text);
-            et.setText(html.toString());
+            Log.d("TEST", synopsis);
+            Log.d("TEST", score);
+            Log.d("TEST", type);
+            Log.d("TEST", studios);
+            Log.d("TEST", genres);
+            Log.d("TEST", episodes);
+            Log.d("TEST", aired);
 
             // TODO: images are 130x194 px
 
             progessDialog.dismiss();
+        }
+
+        private String getSynopsis(Document doc) {
+            Element synopsis = doc.select("meta[property=og:description]").first();
+            return synopsis.attr("content");
+        }
+
+        private String getScore(Document doc) {
+            Element reviewDetailTable = doc.select("table[class=review-detail-status]").first();
+            Elements rows = reviewDetailTable.select("tr");
+            Element scoreRow = rows.get(1);
+            Elements tableData = scoreRow.select("td");
+
+            if (tableData.get(1) != null) {
+                return tableData.get(1).text();
+            } else {
+                return null;
+            }
+        }
+
+        private HashMap<String, String> getGeneralInfo(Document doc) {
+            HashMap<String, String> info = new HashMap<String, String>();
+            Element detailsTable = doc.select("div[class=Detail]").first();
+            Elements detailRows = detailsTable.select("tr");
+
+            for (Element tr : detailRows) {
+                Elements td = tr.select("td");
+                info.put(td.get(0).text(), td.get(1).text());
+            }
+
+            return info;
         }
     }
 }
