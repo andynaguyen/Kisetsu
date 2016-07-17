@@ -6,7 +6,7 @@
     <TextView
         android:id="@+id/anime_title"
         android:layout_width="wrap_content"
-        android:layout_height="240dp"
+        android:layout_height="248dp"
         android:textSize="16dp"/>
 
 </LinearLayout>
