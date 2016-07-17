@@ -99,7 +99,7 @@ public class AnimeCatalogActivity extends AppCompatActivity {
         protected Document doInBackground(String... params) {
             Document doc = null;
             try {
-                doc = Jsoup.connect(testUrl).get();
+                doc = Jsoup.connect(params[0]).get();
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -41,10 +41,7 @@ public class AnimeDetailActivity extends AppCompatActivity {
         seasonFrom = bundle.getString("SeasonFrom");
         yearFrom = bundle.getInt("YearFrom");
 
-        TextView titleView = (TextView) findViewById(R.id.detail_title);
-        titleView.setText(malUrl);
-        Log.d("url", "mal " + malUrl);
-        titleView.setTextColor(Color.BLACK);
+        setTitle("[  ] " + title);
 
         new ParseURLTask().execute(malUrl);
 
@@ -81,15 +78,20 @@ public class AnimeDetailActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Document html) {
-            // Elements of html doc
+            // get all fields to display
             String synopsis = getSynopsis(html);
             String score = getScore(html);
+
             HashMap<String, String> info = getGeneralInfo(html);
             String type = info.get("Type");
             String studios = info.get("Studios");
             String genres = info.get("Genres");
             String episodes = info.get("Episodes");
             String aired = info.get("Aired");
+            String status = info.get("Status");
+
+            // set title to be "[__TYPE__] TITLE"
+            setTitle("[" + type + "] " + title);
 
             Log.d("TEST", synopsis);
             Log.d("TEST", score);
@@ -150,6 +152,8 @@ public class AnimeDetailActivity extends AppCompatActivity {
                 } else {
                     val = "ERROR FETCHING " + td.get(0);
                 }
+
+                Log.d("HashMap", "k: " + key + ", val: " + val);
 
                 info.put(key, val);
             }

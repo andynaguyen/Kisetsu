@@ -18,6 +18,7 @@ public class SeasonsCatalogActivity extends AppCompatActivity {
     // constants
     private static final String TAG = "SeasonsCatalogActivity";
     private static final int NUM_SEASONS = 7;
+    private static final int NUM_UPCOMING_SEASONS = 2;
     private static final int YEAR_LENGTH = 12;
     private static final int SEASON_LENGTH = 3;
 
@@ -56,8 +57,8 @@ public class SeasonsCatalogActivity extends AppCompatActivity {
         int month = cal.get(Calendar.MONTH) + 1;
         int year = cal.get(Calendar.YEAR);
 
-        // Calculate what the month/year will be in 3 months
-        int nextSeasonMonth = month + SEASON_LENGTH;
+        // Calculate what the month/year will be in months
+        int nextSeasonMonth = month + NUM_UPCOMING_SEASONS * SEASON_LENGTH;
         int nextSeasonYear = year;
 
         if (nextSeasonMonth > YEAR_LENGTH) {
