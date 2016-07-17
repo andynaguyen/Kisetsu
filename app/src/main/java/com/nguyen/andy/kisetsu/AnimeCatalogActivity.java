@@ -116,9 +116,20 @@ public class AnimeCatalogActivity extends AppCompatActivity {
             Elements malUrls = html.select("a[class=box-unit7-btn di-box]"); //box-unit7-btn di-box
 
             for (int i = 0; i < images.size() && i < malUrls.size(); i++) {
-                String title  = images.get(i).attr("alt");
-                String imgUrl = images.get(i).attr("data-src");
-                String malUrl = malUrls.get(i).attr("href");
+                String title, imgUrl, malUrl;
+                if (images.get(i) != null) {
+                    title = images.get(i).attr("alt");
+                    imgUrl = images.get(i).attr("data-src");
+                } else {
+                    title = "ERROR GETTING TITLE";
+                    imgUrl = "ERROR GETTING IMAGE";
+                }
+
+                if (malUrls.get(i) != null) {
+                    malUrl = malUrls.get(i).attr("href");
+                } else {
+                    malUrl = "ERROR GETTING LINK";
+                }
 
                 animeItems.add(new AnimeItem(title, imgUrl, malUrl));
             }

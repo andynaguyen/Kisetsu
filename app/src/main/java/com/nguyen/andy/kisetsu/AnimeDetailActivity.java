@@ -106,20 +106,31 @@ public class AnimeDetailActivity extends AppCompatActivity {
 
         private String getSynopsis(Document doc) {
             Element synopsis = doc.select("meta[property=og:description]").first();
-            return synopsis.attr("content");
+
+            if (synopsis != null) {
+                return synopsis.attr("content");
+            } else {
+                return "ERROR FETCHING SYNOPSIS";
+            }
         }
 
         private String getScore(Document doc) {
             Element reviewDetailTable = doc.select("table[class=review-detail-status]").first();
-            Elements rows = reviewDetailTable.select("tr");
-            Element scoreRow = rows.get(1);
-            Elements tableData = scoreRow.select("td");
 
-            if (tableData.get(1) != null) {
-                return tableData.get(1).text();
-            } else {
-                return null;
+            if (reviewDetailTable != null) {
+                Elements rows = reviewDetailTable.select("tr");
+                if (rows != null) {
+                    Element scoreRow = rows.get(1);
+                    if (scoreRow != null) {
+                        Elements tableData = scoreRow.select("td");
+                        if (tableData.get(1) != null) {
+                            return tableData.get(1).text();
+                        }
+                    }
+                }
             }
+
+            return "ERROR FETCHING SCORE";
         }
 
         private HashMap<String, String> getGeneralInfo(Document doc) {
@@ -129,7 +140,18 @@ public class AnimeDetailActivity extends AppCompatActivity {
 
             for (Element tr : detailRows) {
                 Elements td = tr.select("td");
-                info.put(td.get(0).text(), td.get(1).text());
+                String key, val;
+                if (td.get(0) == null) continue;
+
+                key = td.get(0).text();
+
+                if (td.get(1) != null) {
+                    val = td.get(1).text();
+                } else {
+                    val = "ERROR FETCHING " + td.get(0);
+                }
+
+                info.put(key, val);
             }
 
             return info;
