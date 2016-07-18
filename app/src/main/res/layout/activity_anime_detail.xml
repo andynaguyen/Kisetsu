@@ -7,26 +7,36 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.nguyen.andy.kisetsu.AnimeDetailActivity"
-    android:id="@+id/thumbnail">
+    tools:context="com.nguyen.andy.kisetsu.AnimeDetailActivity">
 
-
+<!-- 170x240 dp is half -->
     <ImageView
-        android:layout_width="170dp"
-        android:layout_height="24dp"
-        android:id="@+id/imageView" />
+        android:layout_width="130dp"
+        android:layout_height="183dp"
+        android:id="@+id/thumbnail" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:layout_alignTop="@+id/imageView"
-        android:layout_toRightOf="@+id/imageView"
-        android:layout_toEndOf="@+id/imageView"
-        android:layout_marginLeft="12dp"
+        android:layout_alignTop="@+id/thumbnail"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:layout_toEndOf="@+id/thumbnail"
+        android:layout_marginLeft="6dp"
         android:text="TITLE"
         android:textSize="24dp"
-        android:textStyle="italic"/>
+        android:textStyle="italic"
+        android:id="@+id/title_header" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kono Subarashii Sekai ni Shukufuku wo! 2nd Season"
+        android:id="@+id/detail_title"
+        android:layout_below="@+id/title_header"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:layout_toEndOf="@+id/thumbnail"
+        android:layout_marginLeft="6dp"
+        android:textSize="16dp"/>
 
 
 </RelativeLayout>

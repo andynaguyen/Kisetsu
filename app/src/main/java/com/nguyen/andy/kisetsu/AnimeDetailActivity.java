@@ -1,12 +1,17 @@
 package com.nguyen.andy.kisetsu;
 
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Intent;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.app.ProgressDialog;
 
@@ -19,9 +24,16 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class AnimeDetailActivity extends AppCompatActivity {
+    private static final int SYNOPSIS_PADDING_LEFT = 60;
+    private static final int SYNOPSIS_PADDING_TOP = 36;
+    private static final int SYNOPSIS_PADDING_RIGHT = 36;
+    private static final int SYNOPSIS_PADDING_BOTTOM = 48;
+    private static final int SYNOPSIS_TEXTSIZE = 18;
+
     private String malUrl;
     private String imgUrl;
     private String title;
+    private String summary;
 
     // needed for intent to go back to anime catalog
     private String seasonFrom;
@@ -44,6 +56,28 @@ public class AnimeDetailActivity extends AppCompatActivity {
         setTitle("[  ] " + title);
 
         new ParseURLTask().execute(malUrl);
+
+        ImageView iv = (ImageView) findViewById(R.id.thumbnail);
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder popupBuilder = new AlertDialog.Builder(AnimeDetailActivity.this);
+                TextView tmp = new TextView(AnimeDetailActivity.this);
+                tmp.setText(summary);
+                tmp.setTextSize(SYNOPSIS_TEXTSIZE);
+
+                // left 60, top 30 , right 30, bottom 48
+                tmp.setPadding(
+                        SYNOPSIS_PADDING_LEFT,
+                        SYNOPSIS_PADDING_TOP,
+                        SYNOPSIS_PADDING_RIGHT,
+                        SYNOPSIS_PADDING_BOTTOM
+                );
+
+                popupBuilder.setView(tmp);
+                popupBuilder.show();
+            }
+        });
 
         //TODO: Parse malurl for info
         // synopsis, rating, mediatype, studio, genre(s), epcount, air dates
@@ -92,6 +126,7 @@ public class AnimeDetailActivity extends AppCompatActivity {
 
             // set title to be "[__TYPE__] TITLE"
             setTitle("[" + type + "] " + title);
+            AnimeDetailActivity.this.summary = synopsis;
 
             Log.d("TEST", synopsis);
             Log.d("TEST", score);
