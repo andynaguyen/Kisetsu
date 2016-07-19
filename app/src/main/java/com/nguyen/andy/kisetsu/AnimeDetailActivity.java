@@ -2,6 +2,8 @@ package com.nguyen.andy.kisetsu;
 
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.AsyncTask;
@@ -54,6 +56,17 @@ public class AnimeDetailActivity extends AppCompatActivity {
         yearFrom = bundle.getInt("YearFrom");
 
         setTitle("[  ] " + title);
+
+        // FAB
+        FloatingActionButton detailFab = (FloatingActionButton) findViewById(R.id.detail_fab);
+        detailFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse(malUrl);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
 
         new ParseURLTask().execute(malUrl);
 
