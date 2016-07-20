@@ -115,6 +115,9 @@ public class AnimeCatalogActivity extends AppCompatActivity {
             Elements images = html.select("img");
             Elements malUrls = html.select("a[class=box-unit7-btn di-box]"); //box-unit7-btn di-box
 
+            Log.d("images", ""+images.size());
+            Log.d("malUrls", "" + malUrls.size());
+
             for (int i = 0; i < images.size() && i < malUrls.size(); i++) {
                 String title, imgUrl, malUrl;
                 if (images.get(i) != null) {
@@ -130,6 +133,10 @@ public class AnimeCatalogActivity extends AppCompatActivity {
                 } else {
                     malUrl = "ERROR GETTING LINK";
                 }
+
+                Log.d("debug", "Title[" + i + "]: " + title);
+                Log.d("debug", "imgUrl[" + i + "]: " + imgUrl);
+                Log.d("debug", "malUrl[" + i + "]: " + malUrl);
 
                 animeItems.add(new AnimeItem(title, imgUrl, malUrl));
             }

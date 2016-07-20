@@ -13,8 +13,20 @@
 <!-- 170x240 dp is half -->
     <ImageView
         android:layout_width="130dp"
-        android:layout_height="183dp"
+        android:layout_height="194dp"
         android:id="@+id/thumbnail" />
+
+d    <TextView
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="TAP FOR SUMMARY"
+        android:id="@+id/detail_tap_for_summary"
+        android:layout_below="@+id/thumbnail"
+        android:layout_alignRight="@+id/thumbnail"
+        android:layout_alignEnd="@+id/thumbnail"
+        android:gravity="center"
+        android:background="#616161"
+        android:textColor="#FFFFFF"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -54,6 +66,7 @@
         app:elevation="6dp"
         app:pressedTranslationZ="6dp"
         app:backgroundTint="@color/colorAccent"/>
+
 
 
 

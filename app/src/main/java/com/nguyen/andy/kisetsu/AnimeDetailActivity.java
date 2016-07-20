@@ -28,10 +28,10 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class AnimeDetailActivity extends AppCompatActivity {
-    private static final int SYNOPSIS_PADDING_LEFT = 60;
-    private static final int SYNOPSIS_PADDING_TOP = 36;
-    private static final int SYNOPSIS_PADDING_RIGHT = 36;
-    private static final int SYNOPSIS_PADDING_BOTTOM = 48;
+    private static final int SYNOPSIS_PADDING_LEFT = 54;
+    private static final int SYNOPSIS_PADDING_TOP = 30;
+    private static final int SYNOPSIS_PADDING_RIGHT = 30;
+    private static final int SYNOPSIS_PADDING_BOTTOM = 42;
     private static final int SYNOPSIS_TEXTSIZE = 18;
 
     private String malUrl;
@@ -72,8 +72,8 @@ public class AnimeDetailActivity extends AppCompatActivity {
 
         new ParseURLTask().execute(malUrl);
 
+        // load image for thumbnail and set onclicklistener
         ImageView thumbnailView= (ImageView) findViewById(R.id.thumbnail);
-        Log.d("imgurl", imgUrl);
         Glide.with(this)
                 .load(imgUrl)
                 .into(thumbnailView);
@@ -98,8 +98,29 @@ public class AnimeDetailActivity extends AppCompatActivity {
             }
         });
 
-        //TODO: Parse malurl for info
-        // synopsis, rating, mediatype, studio, genre(s), epcount, air dates
+        // set onclicklistener for TAP FOR SUMMARY
+        TextView tapForSummaryView = (TextView) findViewById(R.id.detail_tap_for_summary);
+        tapForSummaryView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder popupBuilder = new AlertDialog.Builder(AnimeDetailActivity.this);
+                TextView tmp = new TextView(AnimeDetailActivity.this);
+                tmp.setText(summary);
+                tmp.setTextSize(SYNOPSIS_TEXTSIZE);
+
+                // left 60, top 30 , right 30, bottom 48
+                tmp.setPadding(
+                        SYNOPSIS_PADDING_LEFT,
+                        SYNOPSIS_PADDING_TOP,
+                        SYNOPSIS_PADDING_RIGHT,
+                        SYNOPSIS_PADDING_BOTTOM
+                );
+
+                popupBuilder.setView(tmp);
+                popupBuilder.show();
+            }
+        });
+
         //TODO: Open in browser button on main bar
         //TODO: handle intent on back button pressed
     }
@@ -131,7 +152,7 @@ public class AnimeDetailActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Document html) {
-            // get all fields to display
+            // get all fields needed to display
             String synopsis = getSynopsis(html);
             String score = getScore(html);
 
@@ -146,16 +167,6 @@ public class AnimeDetailActivity extends AppCompatActivity {
             // set title to be "[__TYPE__] TITLE"
             setTitle("[" + type + "] " + title);
             AnimeDetailActivity.this.summary = synopsis;
-
-            Log.d("TEST", synopsis);
-            Log.d("TEST", score);
-            Log.d("TEST", type);
-            Log.d("TEST", studios);
-            Log.d("TEST", genres);
-            Log.d("TEST", episodes);
-            Log.d("TEST", aired);
-
-            // TODO: images are 130x194 px
 
             progessDialog.dismiss();
         }
@@ -207,7 +218,7 @@ public class AnimeDetailActivity extends AppCompatActivity {
                     val = "ERROR FETCHING " + td.get(0);
                 }
 
-                Log.d("HashMap", "k: " + key + ", val: " + val);
+                //Log.d("HashMap", "k: " + key + ", val: " + val);
 
                 info.put(key, val);
             }
