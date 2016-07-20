@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.app.ProgressDialog;
 
+import com.bumptech.glide.Glide;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -70,8 +72,12 @@ public class AnimeDetailActivity extends AppCompatActivity {
 
         new ParseURLTask().execute(malUrl);
 
-        ImageView iv = (ImageView) findViewById(R.id.thumbnail);
-        iv.setOnClickListener(new View.OnClickListener() {
+        ImageView thumbnailView= (ImageView) findViewById(R.id.thumbnail);
+        Log.d("imgurl", imgUrl);
+        Glide.with(this)
+                .load(imgUrl)
+                .into(thumbnailView);
+        thumbnailView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder popupBuilder = new AlertDialog.Builder(AnimeDetailActivity.this);
