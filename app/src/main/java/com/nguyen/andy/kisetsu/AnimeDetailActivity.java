@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.app.ProgressDialog;
 
-import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -70,12 +70,15 @@ public class AnimeDetailActivity extends AppCompatActivity {
             }
         });
 
+        Log.d("malurl", malUrl);
+
         new ParseURLTask().execute(malUrl);
 
         // load image for thumbnail and set onclicklistener
         ImageView thumbnailView= (ImageView) findViewById(R.id.thumbnail);
-        Glide.with(this)
+        Picasso.with(this)
                 .load(imgUrl)
+                .fit()
                 .into(thumbnailView);
         thumbnailView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,7 +157,7 @@ public class AnimeDetailActivity extends AppCompatActivity {
         protected void onPostExecute(Document html) {
             // get all fields needed to display
             String synopsis = getSynopsis(html);
-            String score = getScore(html);
+            //String score = getScore(html);
 
             HashMap<String, String> info = getGeneralInfo(html);
             String type = info.get("Type");
