@@ -111,6 +111,37 @@ public class AnimeCatalogActivity extends AppCompatActivity {
         protected void onPostExecute(Document html) {
             final ArrayList<AnimeItem> animeItems = new ArrayList<AnimeItem>();
 
+            Elements titles = html.select("div[class=title]");
+            Elements malUrls = html.select("a[class=thumb]");
+            Elements imgUrls = html.select("div[style=\"\"]");
+
+            for (int i = 0; i < titles.size() && i < malUrls.size() && i < imgUrls.size(); i++) {
+                String title, imgUrl, malUrl;
+
+
+
+                if (titles.get(i) != null) {
+                    title = titles.get(i).text();
+                } else {
+                    title = "ERROR GETTING TITLE";
+                }
+
+                if (malUrls.get(i) != null) {
+                    malUrl = malUrls.get(i).attr("href");
+                } else {
+                    malUrl = "ERROR GETTING URL";
+                }
+
+                if (imgUrls.get(i) != null) {
+                    imgUrl = imgUrls.get(i).attr("data-bg");
+                } else {
+                    imgUrl = "ERROR GETTING IMAGE";
+                }
+
+                animeItems.add(new AnimeItem(title, imgUrl, malUrl));
+            }
+
+            /* BEFORE THE MAL MOBILE UPDATE
             // Elements of html doc
             Elements images = html.select("img");
             Elements malUrls = html.select("a[class=box-unit7-btn di-box]"); //box-unit7-btn di-box
@@ -139,7 +170,7 @@ public class AnimeCatalogActivity extends AppCompatActivity {
                 Log.d("debug", "malUrl[" + i + "]: " + malUrl);
 
                 animeItems.add(new AnimeItem(title, imgUrl, malUrl));
-            }
+            } */
 
             final GridView animeGridView = (GridView) findViewById(R.id.anime_catalog);
             animeGridView.setAdapter(new AnimeListAdapter(getApplicationContext(), animeItems));
