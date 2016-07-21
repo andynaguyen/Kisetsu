@@ -5,23 +5,19 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 import com.nguyen.andy.kisetsu.adapters.AnimeListAdapter;
+import com.nguyen.andy.kisetsu.parsers.AnimeCatalogParser;
 
 public class AnimeCatalogActivity extends AppCompatActivity {
     private static final String MAL_PREFIX_URL = "http://myanimelist.net/anime/season/";
@@ -51,13 +47,6 @@ public class AnimeCatalogActivity extends AppCompatActivity {
         new ParseURLTask().execute(url);
     }
 
-    private void initGrid(Document doc) {
-        Elements titles = doc.select("a.link-title");
-        for (Element title : titles) {
-            Log.d("gridUI", title.text());
-        }
-    }
-
     private String buildURL(String season, int year) {
         // URL FORMAT: PREFIX + SEASON (in lowercase) + '/' + YEAR
         StringBuilder url = new StringBuilder();
@@ -82,7 +71,7 @@ public class AnimeCatalogActivity extends AppCompatActivity {
         return doc;
     }
 
-    private class ParseURLTask extends AsyncTask<String, Void, Document> {
+    private class ParseURLTask extends AsyncTask<String, Void, AnimeCatalogParser> {
         String testUrl = "http://myanimelist.net/anime/season/2017/winter";
 
         @Override
@@ -96,21 +85,26 @@ public class AnimeCatalogActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Document doInBackground(String... params) {
+        protected AnimeCatalogParser doInBackground(String... params) {
+            /*
             Document doc = null;
             try {
                 doc = Jsoup.connect(params[0]).get();
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
+            AnimeCatalogParser parser = new AnimeCatalogParser(params[0]);
 
-            return doc;
+            if (parser == null) return null;
+
+            return parser;
         }
 
         @Override
-        protected void onPostExecute(Document html) {
-            final ArrayList<AnimeItem> animeItems = new ArrayList<AnimeItem>();
+        protected void onPostExecute(AnimeCatalogParser parser) {
+            final ArrayList<AnimeItem> animeItems = parser.parseAnimeList();
 
+            /* Use AnimeCatalogParser instead
             Elements titles = html.select("div[class=title]");
             Elements malUrls = html.select("a[class=thumb]");
             Elements imgUrls = html.select("div[style=\"\"]");
@@ -139,7 +133,7 @@ public class AnimeCatalogActivity extends AppCompatActivity {
                 }
 
                 animeItems.add(new AnimeItem(title, imgUrl, malUrl));
-            }
+            } */
 
             /* BEFORE THE MAL MOBILE UPDATE
             // Elements of html doc

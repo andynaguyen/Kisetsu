@@ -1,7 +1,5 @@
 package com.nguyen.andy.kisetsu;
 
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -10,22 +8,17 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Intent;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.app.ProgressDialog;
 
 import com.squareup.picasso.Picasso;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.io.IOException;
 import java.util.HashMap;
+
+import com.nguyen.andy.kisetsu.parsers.DetailParser;
+
 
 public class AnimeDetailActivity extends AppCompatActivity {
     private static final int SYNOPSIS_PADDING_LEFT = 54;
@@ -76,6 +69,7 @@ public class AnimeDetailActivity extends AppCompatActivity {
 
         // load image for thumbnail and set onclicklistener
         ImageView thumbnailView= (ImageView) findViewById(R.id.thumbnail);
+        Log.d("thumbnail", "url: " + imgUrl);
         Picasso.with(this)
                 .load(imgUrl)
                 .fit()
@@ -128,8 +122,9 @@ public class AnimeDetailActivity extends AppCompatActivity {
         //TODO: handle intent on back button pressed
     }
 
-    private class ParseURLTask extends AsyncTask<String, Void, Document> {
+    private class ParseURLTask extends AsyncTask<String, Void, DetailParser> {
         //String testUrl = "http://myanimelist.net/anime/season/2017/winter";
+        //DetailParser parser;
 
         @Override
         protected void onPreExecute() {
@@ -142,24 +137,28 @@ public class AnimeDetailActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Document doInBackground(String... params) {
-            Document doc = null;
+        protected DetailParser doInBackground(String... params) {
+            /*Document doc = null;
             try {
                 doc = Jsoup.connect(params[0]).get();
+                parser = new DetailParser(params[0]);
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
+            DetailParser parser = new DetailParser(params[0]);
 
-            return doc;
+            if (parser == null) return null;
+
+            return parser;
         }
 
         @Override
-        protected void onPostExecute(Document html) {
+        protected void onPostExecute(DetailParser parser) {
             // get all fields needed to display
-            String synopsis = getSynopsis(html);
-            //String score = getScore(html);
+            String synopsis = parser.parseSynopsis();
+            String score = parser.parseScore();
 
-            HashMap<String, String> info = getGeneralInfo(html);
+            HashMap<String, String> info = parser.parseGeneralInfo();
             String type = info.get("Type");
             String studios = info.get("Studios");
             String genres = info.get("Genres");
@@ -174,6 +173,7 @@ public class AnimeDetailActivity extends AppCompatActivity {
             progessDialog.dismiss();
         }
 
+        /*
         private String getSynopsis(Document doc) {
             Element synopsis = doc.select("meta[property=og:description]").first();
 
@@ -227,6 +227,6 @@ public class AnimeDetailActivity extends AppCompatActivity {
             }
 
             return info;
-        }
+        }*/
     }
 }
