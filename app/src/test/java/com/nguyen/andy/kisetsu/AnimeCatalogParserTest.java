@@ -3,9 +3,7 @@ package com.nguyen.andy.kisetsu;
 import com.nguyen.andy.kisetsu.parsers.AnimeCatalogParser;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -28,7 +26,7 @@ public class AnimeCatalogParserTest {
             "            </div>\n" +
             "            <a href=\"http://myanimelist.net/anime/30485/ChäoS_Child\" class=\"thumb\"></a>\n" +
             "        </div>";
-    private static final String FILENAME = "winter2017.html";
+    private static final String FILENAME = "winter2017.html.test";
     AnimeCatalogParser parser;
 
     @Test

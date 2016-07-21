@@ -4,17 +4,21 @@ import com.nguyen.andy.kisetsu.parsers.DetailParser;
 
 import junit.framework.TestCase;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 
 /**
  * Created by Andy on 7/20/2016.
  */
 public class DetailParserTest extends TestCase {
     private static final String TEST_URL = "http://myanimelist.net/anime/32949/Kuzu_no_Honkai";
-    private static final String FILENAME = "kuzu_no_honkai.html";
+    private static final String FILENAME = "kuzu_no_honkai.html.test";
     private static final String TEST_SYNOPSIS =
             "Seventeen-year-old Mugi Awaya and Hanabi Yasuraoka appear to be the ideal couple. "
             + "They are both pretty popular, and they seem to suit each other well. However, "
@@ -48,13 +52,33 @@ public class DetailParserTest extends TestCase {
     }
 
     @Test
+    public void testBadSynopsis() throws Exception {
+        String badHTML = "<div></div>";
+        parser = new DetailParser(Jsoup.parse(badHTML));
+        assertEquals("ERROR FETCHING SYNOPSIS", parser.parseSynopsis());
+    }
+
+    @Test
+    public void testBadSynopsis2() throws Exception {
+        String badHTML = "<div> <meta[property=og:description]></meta></div>";
+        parser = new DetailParser(Jsoup.parse(badHTML));
+        assertEquals("ERROR FETCHING SYNOPSIS", parser.parseSynopsis());
+    }
+
+    @Test
     public void testGetScore() throws Exception {
-        //DetailParser dp = new DetailParser("http://myanimelist.net/anime/30015/ReLIFE");
         assertEquals("N/A", parser.parseScore());
     }
 
     @Test
     public void testGetGeneralInfo() throws Exception {
-
+        HashMap<String, String> info = parser.parseGeneralInfo();
+        assertEquals("TV", info.get("Type"));
+        assertEquals("Unknown", info.get("Episodes"));
+        assertEquals("Not yet aired", info.get("Status"));
+        assertEquals("Jan, 2017 to ?", info.get("Aired"));
+        assertEquals("Unknown", info.get("Studios"));
+        assertEquals("Manga", info.get("Source"));
+        assertEquals("Drama, Romance, School, Seinen", info.get("Genres"));
     }
 }

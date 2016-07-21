@@ -25,6 +25,7 @@ public class DetailParser {
         }
     }
 
+    // FOR TESTING PURPOSES
     public DetailParser(File file, String url) {
         try {
             doc = Jsoup.parse(file, "UTF-8", url);
@@ -33,11 +34,16 @@ public class DetailParser {
         }
     }
 
+    // FOR TESTING PURPOSES
+    public DetailParser(Document doc) {
+        this.doc = doc;
+    }
+
     // return the synopsis for the detail page
     public String parseSynopsis() {
         Element synopsis = doc.select("meta[property=og:description]").first();
 
-        if (synopsis != null) {
+        if (synopsis != null && !synopsis.equals("")) {
             return synopsis.attr("content");
         } else {
             return "ERROR FETCHING SYNOPSIS";
