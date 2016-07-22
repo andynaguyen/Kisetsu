@@ -27,11 +27,108 @@
         app:pressedTranslationZ="6dp"
         app:backgroundTint="@color/colorAccent"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:id="@+id/score_stats_layout"
+        android:background="#FFFFFF"
+        android:elevation="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="6dp"
+            android:id="@+id/score_stats_headers"
+            android:background="@color/colorPrimary"
+            android:weightSum="3"
+            android:elevation="2dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:id="@+id/ranked_header"
+                android:text="RANKED"
+                android:textSize="16dp"
+                android:textColor="#FFFFFF"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:id="@+id/score_header"
+                android:text="SCORE"
+                android:textSize="16dp"
+                android:textColor="#FFFFFF"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:id="@+id/popularity_header"
+                android:text="POPULARITY"
+                android:textSize="16dp"
+                android:textColor="#FFFFFF"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/score_stats_headers"
+            android:layout_marginTop="-6dp"
+            android:layout_marginBottom="6dp"
+            android:id="@+id/score_stats"
+            android:weightSum="3">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/detail_ranked"
+                android:text="#69"
+                android:textSize="16dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/detail_score"
+                android:text="5/7"
+                android:textSize="16dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:id="@+id/detail_popularity"
+                android:text="#420"
+                android:textSize="16dp"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
     <ImageView
         android:layout_width="146dp"
         android:layout_height="204dp"
         android:layout_marginLeft="0dp"
-        android:id="@+id/thumbnail" />
+        android:layout_marginTop="2.1dp"
+        android:layout_below="@+id/score_stats_layout"
+        android:id="@+id/thumbnail"
+        android:elevation="2dp"/>
 
     <TextView
         android:layout_width="146dp"
@@ -41,6 +138,7 @@
         android:layout_below="@+id/thumbnail"
         android:layout_alignRight="@+id/thumbnail"
         android:layout_alignEnd="@+id/thumbnail"
+        android:layout_marginBottom=".1dp"
         android:gravity="center"
         android:background="#616161"
         android:textColor="#FFFFFF"
@@ -147,96 +245,12 @@
         android:layout_below="@+id/detail_tap_for_summary"
         android:layout_marginTop="0dp"
         android:background="#FFFFFF"
-        android:elevation="6dp"
+        android:elevation="1dp"
         >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="6dp"
-            android:id="@+id/score_stats_headers"
-            android:background="@color/colorPrimary"
-            android:weightSum="3"
-            android:elevation="2dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:id="@+id/ranked_header"
-                android:text="RANKED"
-                android:textSize="16dp"
-                android:textColor="#FFFFFF"
-                android:gravity="center_horizontal"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:id="@+id/score_header"
-                android:text="SCORE"
-                android:textSize="16dp"
-                android:textColor="#FFFFFF"
-                android:gravity="center_horizontal"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:id="@+id/popularity_header"
-                android:text="POPULARITY"
-                android:textSize="16dp"
-                android:textColor="#FFFFFF"
-                android:gravity="center_horizontal"
-                android:layout_weight="1"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/score_stats_headers"
-            android:layout_marginTop="-6dp"
-            android:layout_marginBottom="6dp"
-            android:id="@+id/score_stats"
-            android:weightSum="3">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/detail_ranked"
-                android:text="#69"
-                android:textSize="16dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/detail_score"
-                android:text="5/7"
-                android:textSize="16dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:id="@+id/detail_popularity"
-                android:text="#420"
-                android:textSize="16dp"
-                android:gravity="center_horizontal"
-                android:layout_weight="1"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/score_stats"
             android:paddingTop="6dp"
             android:id="@+id/other_stats_header"
             android:background="@color/colorPrimary"
@@ -299,7 +313,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/detail_score"
+                android:id="@+id/detail_episodse"
                 android:text="25"
                 android:textSize="16dp"
                 android:layout_marginTop="10dp"
@@ -310,7 +324,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:id="@+id/detail_popularity"
+                android:id="@+id/detail_duration"
                 android:text="25 min. per ep."
                 android:textSize="16dp"
                 android:gravity="center_horizontal"
