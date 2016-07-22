@@ -205,7 +205,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/detailed_rank"
+                android:id="@+id/detail_ranked"
                 android:text="#69"
                 android:textSize="16dp"
                 android:layout_marginTop="10dp"
@@ -228,6 +228,90 @@
                 android:layout_marginTop="10dp"
                 android:id="@+id/detail_popularity"
                 android:text="#420"
+                android:textSize="16dp"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/score_stats"
+            android:paddingTop="6dp"
+            android:id="@+id/other_stats_header"
+            android:background="@color/colorPrimary"
+            android:weightSum="3"
+            android:elevation="2dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:id="@+id/rating_header"
+                android:text="RATING"
+                android:textSize="16dp"
+                android:textColor="#FFFFFF"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:id="@+id/episode_header"
+                android:text="EPISODES"
+                android:textSize="16dp"
+                android:textColor="#FFFFFF"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:id="@+id/duration_header"
+                android:text="DURATION"
+                android:textSize="16dp"
+                android:textColor="#FFFFFF"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/other_stats_header"
+            android:layout_marginTop="-6dp"
+            android:layout_marginBottom="6dp"
+            android:id="@+id/other_stats"
+            android:weightSum="3">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/detail_rating"
+                android:text="R - 17+"
+                android:textSize="16dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/detail_score"
+                android:text="25"
+                android:textSize="16dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:id="@+id/detail_popularity"
+                android:text="25 min. per ep."
                 android:textSize="16dp"
                 android:gravity="center_horizontal"
                 android:layout_weight="1"/>
