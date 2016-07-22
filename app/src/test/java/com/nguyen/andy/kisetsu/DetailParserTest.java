@@ -43,7 +43,6 @@ public class DetailParserTest extends TestCase {
     public void testBadUrl() throws Exception {
         DetailParser invalid = new DetailParser("http://google.com/");
         assertEquals(invalid.parseSynopsis(), "ERROR FETCHING SYNOPSIS");
-        assertEquals(invalid.parseScore(), "ERROR FETCHING SCORE");
     }
 
     @Test
@@ -63,11 +62,6 @@ public class DetailParserTest extends TestCase {
         String badHTML = "<div> <meta[property=og:description]></meta></div>";
         parser = new DetailParser(Jsoup.parse(badHTML));
         assertEquals("ERROR FETCHING SYNOPSIS", parser.parseSynopsis());
-    }
-
-    @Test
-    public void testGetScore() throws Exception {
-        assertEquals("N/A", parser.parseScore());
     }
 
     @Test

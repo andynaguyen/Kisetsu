@@ -50,26 +50,6 @@ public class DetailParser {
         }
     }
 
-    // return the score of the anime
-    public String parseScore() {
-        Element reviewDetailTable = doc.select("table[class=review-detail-status]").first();
-        if (reviewDetailTable != null) {
-            Elements rows = reviewDetailTable.select("tr");
-            if (rows != null) {
-                Element scoreRow = rows.get(1);
-                if (scoreRow != null) {
-                    Elements tableData = scoreRow.select("td");
-                    if (tableData.get(1) != null) {
-
-                        return tableData.get(1).text();
-                    }
-                }
-            }
-        }
-
-        return "ERROR FETCHING SCORE";
-    }
-
     // return the general info found in the detail page
     public HashMap<String, String> parseGeneralInfo() {
         HashMap<String, String> info = new HashMap<String, String>();

@@ -156,7 +156,6 @@ public class AnimeDetailActivity extends AppCompatActivity {
         protected void onPostExecute(DetailParser parser) {
             // get all fields needed to display
             String synopsis = parser.parseSynopsis();
-            String score = parser.parseScore();
 
             HashMap<String, String> info = parser.parseGeneralInfo();
             String type = info.get("Type");
@@ -165,6 +164,9 @@ public class AnimeDetailActivity extends AppCompatActivity {
             String episodes = info.get("Episodes");
             String aired = info.get("Aired");
             String status = info.get("Status");
+            String score = info.get("Score");
+            String ranked = info.get("Ranked");
+            String popularity = info.get("Popularity");
 
             // set title to be "[__TYPE__] TITLE"
             setTitle("[" + type + "] " + title);
