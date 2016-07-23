@@ -8,12 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 import com.nguyen.andy.kisetsu.adapters.AnimeListAdapter;
@@ -37,13 +32,12 @@ public class AnimeCatalogActivity extends AppCompatActivity {
         season = bundle.getString("Season");
         year = bundle.getInt("Year");
 
-        // ex: "SUMMER" -> "Summer"
+        // ex: "SUMMER" -> "Summer" + year
         String title =
                 season.substring(0,1).toUpperCase() + season.substring(1).toLowerCase() + " " + year;
         setTitle(title);
 
         String url = buildURL(season, year);
-
         new ParseURLTask().execute(url);
     }
 
@@ -56,19 +50,6 @@ public class AnimeCatalogActivity extends AppCompatActivity {
         url.append(season.toLowerCase());
 
         return url.toString();
-    }
-
-    private Document getDocumentFromUrl(String url) {
-        Document doc;
-
-        try {
-            doc = Jsoup.connect(url).get();
-        } catch (IOException e) {
-            Toast.makeText(getApplicationContext(), "Could not make connection: " + e.getMessage(),
-                    Toast.LENGTH_LONG).show();
-            return null;
-        }
-        return doc;
     }
 
     private class ParseURLTask extends AsyncTask<String, Void, AnimeCatalogParser> {
@@ -86,85 +67,12 @@ public class AnimeCatalogActivity extends AppCompatActivity {
 
         @Override
         protected AnimeCatalogParser doInBackground(String... params) {
-            /*
-            Document doc = null;
-            try {
-                doc = Jsoup.connect(params[0]).get();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
-            AnimeCatalogParser parser = new AnimeCatalogParser(params[0]);
-
-            if (parser == null) return null;
-
-            return parser;
+            return new AnimeCatalogParser(params[0]);
         }
 
         @Override
         protected void onPostExecute(AnimeCatalogParser parser) {
             final ArrayList<AnimeItem> animeItems = parser.parseAnimeList();
-
-            /* Use AnimeCatalogParser instead
-            Elements titles = html.select("div[class=title]");
-            Elements malUrls = html.select("a[class=thumb]");
-            Elements imgUrls = html.select("div[style=\"\"]");
-
-            for (int i = 0; i < titles.size() && i < malUrls.size() && i < imgUrls.size(); i++) {
-                String title, imgUrl, malUrl;
-
-
-
-                if (titles.get(i) != null) {
-                    title = titles.get(i).text();
-                } else {
-                    title = "ERROR GETTING TITLE";
-                }
-
-                if (malUrls.get(i) != null) {
-                    malUrl = malUrls.get(i).attr("href");
-                } else {
-                    malUrl = "ERROR GETTING URL";
-                }
-
-                if (imgUrls.get(i) != null) {
-                    imgUrl = imgUrls.get(i).attr("data-bg");
-                } else {
-                    imgUrl = "ERROR GETTING IMAGE";
-                }
-
-                animeItems.add(new AnimeItem(title, imgUrl, malUrl));
-            } */
-
-            /* BEFORE THE MAL MOBILE UPDATE
-            // Elements of html doc
-            Elements images = html.select("img");
-            Elements malUrls = html.select("a[class=box-unit7-btn di-box]"); //box-unit7-btn di-box
-
-            Log.d("images", ""+images.size());
-            Log.d("malUrls", "" + malUrls.size());
-
-            for (int i = 0; i < images.size() && i < malUrls.size(); i++) {
-                String title, imgUrl, malUrl;
-                if (images.get(i) != null) {
-                    title = images.get(i).attr("alt");
-                    imgUrl = images.get(i).attr("data-src");
-                } else {
-                    title = "ERROR GETTING TITLE";
-                    imgUrl = "ERROR GETTING IMAGE";
-                }
-
-                if (malUrls.get(i) != null) {
-                    malUrl = malUrls.get(i).attr("href");
-                } else {
-                    malUrl = "ERROR GETTING LINK";
-                }
-
-                Log.d("debug", "Title[" + i + "]: " + title);
-                Log.d("debug", "imgUrl[" + i + "]: " + imgUrl);
-                Log.d("debug", "malUrl[" + i + "]: " + malUrl);
-
-                animeItems.add(new AnimeItem(title, imgUrl, malUrl));
-            } */
 
             final GridView animeGridView = (GridView) findViewById(R.id.anime_catalog);
             animeGridView.setAdapter(new AnimeListAdapter(getApplicationContext(), animeItems));
@@ -182,7 +90,6 @@ public class AnimeCatalogActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-            // TODO: images are 130x194 px
 
             progessDialog.dismiss();
         }

@@ -19,6 +19,8 @@ import java.util.HashMap;
 
 import com.nguyen.andy.kisetsu.parsers.DetailParser;
 
+import org.w3c.dom.Text;
+
 
 public class AnimeDetailActivity extends AppCompatActivity {
     private static final int SYNOPSIS_PADDING_LEFT = 54;
@@ -26,6 +28,14 @@ public class AnimeDetailActivity extends AppCompatActivity {
     private static final int SYNOPSIS_PADDING_RIGHT = 30;
     private static final int SYNOPSIS_PADDING_BOTTOM = 42;
     private static final int SYNOPSIS_TEXTSIZE = 18;
+    private static final HashMap<String, String> RATING_MAP;
+
+    static {
+        RATING_MAP = new HashMap<String, String>();
+        RATING_MAP.put("PG-13 - Teens 13 or older", "PG-13");
+        RATING_MAP.put("R - 17+ (violence & profanity)", "R-17+");
+        RATING_MAP.put("G - All Ages", "G");
+    }
 
     private String malUrl;
     private String imgUrl;
@@ -117,15 +127,9 @@ public class AnimeDetailActivity extends AppCompatActivity {
                 popupBuilder.show();
             }
         });
-
-        //TODO: Open in browser button on main bar
-        //TODO: handle intent on back button pressed
     }
 
     private class ParseURLTask extends AsyncTask<String, Void, DetailParser> {
-        //String testUrl = "http://myanimelist.net/anime/season/2017/winter";
-        //DetailParser parser;
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -138,18 +142,7 @@ public class AnimeDetailActivity extends AppCompatActivity {
 
         @Override
         protected DetailParser doInBackground(String... params) {
-            /*Document doc = null;
-            try {
-                doc = Jsoup.connect(params[0]).get();
-                parser = new DetailParser(params[0]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
-            DetailParser parser = new DetailParser(params[0]);
-
-            if (parser == null) return null;
-
-            return parser;
+            return new DetailParser(params[0]);
         }
 
         @Override
@@ -158,77 +151,59 @@ public class AnimeDetailActivity extends AppCompatActivity {
             String synopsis = parser.parseSynopsis();
 
             HashMap<String, String> info = parser.parseGeneralInfo();
-            String type = info.get("Type");
-            String studios = info.get("Studios");
-            String genres = info.get("Genres");
-            String episodes = info.get("Episodes");
-            String aired = info.get("Aired");
-            String status = info.get("Status");
             String score = info.get("Score");
             String ranked = info.get("Ranked");
             String popularity = info.get("Popularity");
+            String type = info.get("Type");
+            String status = info.get("Status");
+            String aired = info.get("Aired");
+            String rating = info.get("Rating");
+            String episodes = info.get("Episodes");
+            String duration = info.get("Duration");
+            String source = info.get("Source");
+            String studios = info.get("Studios");
+            String genres = info.get("Genres");
 
             // set title to be "[__TYPE__] TITLE"
             setTitle("[" + type + "] " + title);
             AnimeDetailActivity.this.summary = synopsis;
 
+            // modify the strings
+            score = score.split("\\*")[0];
+            ranked = ranked.split("\\*")[0];
+            Log.d("popularity", "before " + popularity);
+            rating = RATING_MAP.get(rating);
+            Log.d("popularity", "after " + popularity);
+
+
+            TextView titleTV = (TextView) findViewById(R.id.detail_title);
+            titleTV.setText(title);
+            TextView scoreTV = (TextView) findViewById(R.id.detail_score);
+            scoreTV.setText(score);
+            TextView rankedTV = (TextView) findViewById(R.id.detail_ranked);
+            rankedTV.setText(ranked);
+            TextView popularityTV = (TextView) findViewById(R.id.detail_popularity);
+            popularityTV.setText(popularity);
+            TextView typeTV = (TextView) findViewById(R.id.detail_media_type);
+            typeTV.setText(type);
+            TextView statusTV = (TextView) findViewById(R.id.detail_status);
+            statusTV.setText(status);
+            TextView airedTV = (TextView) findViewById(R.id.detail_aired_on);
+            airedTV.setText(aired);
+            TextView ratingTV = (TextView) findViewById(R.id.detail_rating);
+            ratingTV.setText(rating);
+            TextView episodesTV = (TextView) findViewById(R.id.detail_episodse);
+            episodesTV.setText(episodes);
+            TextView durationTV = (TextView) findViewById(R.id.detail_duration);
+            durationTV.setText(duration);
+            TextView sourceTV = (TextView) findViewById(R.id.detail_source);
+            sourceTV.setText(source);
+            TextView studiosTV = (TextView) findViewById(R.id.detail_studios);
+            studiosTV.setText(studios);
+            TextView genresTV = (TextView) findViewById(R.id.detail_genres);
+            genresTV.setText(genres);
+
             progessDialog.dismiss();
         }
-
-        /*
-        private String getSynopsis(Document doc) {
-            Element synopsis = doc.select("meta[property=og:description]").first();
-
-            if (synopsis != null) {
-                return synopsis.attr("content");
-            } else {
-                return "ERROR FETCHING SYNOPSIS";
-            }
-        }
-
-        private String getScore(Document doc) {
-            Element reviewDetailTable = doc.select("table[class=review-detail-status]").first();
-
-            if (reviewDetailTable != null) {
-                Elements rows = reviewDetailTable.select("tr");
-                if (rows != null) {
-                    Element scoreRow = rows.get(1);
-                    if (scoreRow != null) {
-                        Elements tableData = scoreRow.select("td");
-                        if (tableData.get(1) != null) {
-                            return tableData.get(1).text();
-                        }
-                    }
-                }
-            }
-
-            return "ERROR FETCHING SCORE";
-        }
-
-        private HashMap<String, String> getGeneralInfo(Document doc) {
-            HashMap<String, String> info = new HashMap<String, String>();
-            Element detailsTable = doc.select("div[class=Detail]").first();
-            Elements detailRows = detailsTable.select("tr");
-
-            for (Element tr : detailRows) {
-                Elements td = tr.select("td");
-                String key, val;
-                if (td.get(0) == null) continue;
-
-                key = td.get(0).text();
-
-                if (td.get(1) != null) {
-                    val = td.get(1).text();
-                } else {
-                    val = "ERROR FETCHING " + td.get(0);
-                }
-
-                //Log.d("HashMap", "k: " + key + ", val: " + val);
-
-                info.put(key, val);
-            }
-
-            return info;
-        }*/
     }
 }
