@@ -1,7 +1,7 @@
 package com.nguyen.andy.kisetsu;
 
 /**
- * Created by Andy on 7/12/2016.
+ * Represents an Anime series for the AnimeCatalogActivity and AnimeListParser
  */
 public class AnimeItem {
 

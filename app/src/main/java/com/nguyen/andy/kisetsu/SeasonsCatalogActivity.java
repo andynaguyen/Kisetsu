@@ -14,6 +14,11 @@ import com.nguyen.andy.kisetsu.adapters.SeasonsListAdapter;
 
 // Kisetsu
 // 季節
+
+/**
+ * This is the main activity that opens up on the start of the app. Displays a list of Seasons,
+ * starting from two seasons in the future and going backwards until there are 15 seasons listed.
+ */
 public class SeasonsCatalogActivity extends AppCompatActivity {
     // constants
     private static final String TAG = "SeasonsCatalogActivity";
@@ -33,22 +38,27 @@ public class SeasonsCatalogActivity extends AppCompatActivity {
 
         initSeasons();
 
-        final ListView seasonsListView = (ListView) findViewById(R.id.seasons_catalog);
-        seasonsListView.setAdapter(new SeasonsListAdapter(this, seasons));
-        seasonsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // Set the adapter to the season catalog layout and populate the UI wiht seasons
+        final ListView seasonsCatalogView = (ListView) findViewById(R.id.seasons_catalog);
+        seasonsCatalogView.setAdapter(new SeasonsListAdapter(this, seasons));
+        seasonsCatalogView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SeasonItem seasonData = (SeasonItem) seasonsListView.getItemAtPosition(position);
+                SeasonItem seasonData = (SeasonItem) seasonsCatalogView.getItemAtPosition(position);
 
                 Intent intent = new Intent(getApplicationContext(), AnimeCatalogActivity.class);
                 intent.putExtra("Season", seasonData.getSeason());
                 intent.putExtra("Year", seasonData.getYear());
 
+                // open the AnimeCatalogActivity for this season
                 startActivity(intent);
             }
         });
     }
 
+    /**
+     * Initializes the list of SeasonItems given the current date.
+     */
     private void initSeasons() {
         seasons = new ArrayList<SeasonItem>();
 
@@ -73,7 +83,4 @@ public class SeasonsCatalogActivity extends AppCompatActivity {
             seasons.add(currSeason);
         }
     }
-
-
-
 }

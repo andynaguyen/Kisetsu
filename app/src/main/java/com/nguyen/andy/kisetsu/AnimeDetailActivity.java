@@ -7,11 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.app.ProgressDialog;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -19,16 +19,14 @@ import java.util.HashMap;
 
 import com.nguyen.andy.kisetsu.parsers.DetailParser;
 
-import org.w3c.dom.Text;
-
-
 public class AnimeDetailActivity extends AppCompatActivity {
+    // constants
     private static final int SYNOPSIS_PADDING_LEFT = 54;
     private static final int SYNOPSIS_PADDING_TOP = 30;
     private static final int SYNOPSIS_PADDING_RIGHT = 30;
     private static final int SYNOPSIS_PADDING_BOTTOM = 42;
     private static final int SYNOPSIS_TEXTSIZE = 18;
-    private static final HashMap<String, String> RATING_MAP;
+    private static final HashMap<String, String> RATING_MAP; // simplifies the parsed Ratings
 
     static {
         RATING_MAP = new HashMap<String, String>();
@@ -39,12 +37,11 @@ public class AnimeDetailActivity extends AppCompatActivity {
         RATING_MAP.put("None", "None");
     }
 
+    // fields
     private String malUrl;
     private String imgUrl;
     private String title;
     private String summary;
-
-    // needed for intent to go back to anime catalog
     private String seasonFrom;
     private int yearFrom;
 
@@ -55,6 +52,7 @@ public class AnimeDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_anime_detail);
 
+        // unpack variables from intent
         Bundle bundle = getIntent().getExtras();
         malUrl = bundle.getString("MalUrl");
         imgUrl = bundle.getString("ImgUrl");
@@ -64,7 +62,7 @@ public class AnimeDetailActivity extends AppCompatActivity {
 
         setTitle("[  ] " + title);
 
-        // FAB
+        // make FAB
         FloatingActionButton detailFab = (FloatingActionButton) findViewById(R.id.detail_fab);
         detailFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,66 +73,22 @@ public class AnimeDetailActivity extends AppCompatActivity {
             }
         });
 
-        Log.d("malurl", malUrl);
-
-        new ParseURLTask().execute(malUrl);
-
-        // load image for thumbnail and set onclicklistener
-        ImageView thumbnailView= (ImageView) findViewById(R.id.thumbnail);
-        Log.d("thumbnail", "url: " + imgUrl);
-        Picasso.with(this)
-                .load(imgUrl)
-                .fit()
-                .into(thumbnailView);
-        thumbnailView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder popupBuilder = new AlertDialog.Builder(AnimeDetailActivity.this);
-                TextView tmp = new TextView(AnimeDetailActivity.this);
-                tmp.setText(summary);
-                tmp.setTextSize(SYNOPSIS_TEXTSIZE);
-
-                // left 60, top 30 , right 30, bottom 48
-                tmp.setPadding(
-                        SYNOPSIS_PADDING_LEFT,
-                        SYNOPSIS_PADDING_TOP,
-                        SYNOPSIS_PADDING_RIGHT,
-                        SYNOPSIS_PADDING_BOTTOM
-                );
-
-                popupBuilder.setView(tmp);
-                popupBuilder.show();
-            }
-        });
-
-        // set onclicklistener for TAP FOR SUMMARY
-        TextView tapForSummaryView = (TextView) findViewById(R.id.detail_tap_for_summary);
-        tapForSummaryView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder popupBuilder = new AlertDialog.Builder(AnimeDetailActivity.this);
-                TextView tmp = new TextView(AnimeDetailActivity.this);
-                tmp.setText(summary);
-                tmp.setTextSize(SYNOPSIS_TEXTSIZE);
-
-                // left 60, top 30 , right 30, bottom 48
-                tmp.setPadding(
-                        SYNOPSIS_PADDING_LEFT,
-                        SYNOPSIS_PADDING_TOP,
-                        SYNOPSIS_PADDING_RIGHT,
-                        SYNOPSIS_PADDING_BOTTOM
-                );
-
-                popupBuilder.setView(tmp);
-                popupBuilder.show();
-            }
-        });
+        // if connected to internet, start web scraping.
+        // else, make toast
+        if (ConnectivityCheck.isConnectedToInternet(getApplicationContext())) {
+            new ParseURLTask().execute(malUrl);
+        } else{
+            Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show();
+        }
     }
 
+    // asyncTask dedicated to parsing the HTML
     private class ParseURLTask extends AsyncTask<String, Void, DetailParser> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+            // start progressDialog
             progessDialog = new ProgressDialog(AnimeDetailActivity.this);
             progessDialog.setTitle("Fetching data");
             progessDialog.setMessage("Loading...");
@@ -173,11 +127,9 @@ public class AnimeDetailActivity extends AppCompatActivity {
             // modify the strings
             score = score.split("\\*")[0];
             ranked = ranked.split("\\*")[0];
-            Log.d("popularity", "before " + popularity);
             rating = RATING_MAP.get(rating);
-            Log.d("popularity", "after " + popularity);
 
-
+            // set text for all the views
             TextView titleTV = (TextView) findViewById(R.id.detail_title);
             titleTV.setText(title);
             TextView scoreTV = (TextView) findViewById(R.id.detail_score);
@@ -204,6 +156,56 @@ public class AnimeDetailActivity extends AppCompatActivity {
             studiosTV.setText(studios);
             TextView genresTV = (TextView) findViewById(R.id.detail_genres);
             genresTV.setText(genres);
+
+            // load image for thumbnail and set onclicklistener
+            ImageView thumbnailView= (ImageView) findViewById(R.id.thumbnail);
+            Picasso.with(getApplicationContext())
+                    .load(imgUrl)
+                    .fit()
+                    .into(thumbnailView);
+            thumbnailView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder popupBuilder = new AlertDialog.Builder(AnimeDetailActivity.this);
+                    TextView tmp = new TextView(AnimeDetailActivity.this);
+                    tmp.setText(summary);
+                    tmp.setTextSize(SYNOPSIS_TEXTSIZE);
+
+                    // left 60, top 30 , right 30, bottom 48
+                    tmp.setPadding(
+                            SYNOPSIS_PADDING_LEFT,
+                            SYNOPSIS_PADDING_TOP,
+                            SYNOPSIS_PADDING_RIGHT,
+                            SYNOPSIS_PADDING_BOTTOM
+                    );
+
+                    popupBuilder.setView(tmp);
+                    popupBuilder.show();
+                }
+            });
+
+            // set onclicklistener for TAP FOR SUMMARY
+            TextView tapForSummaryView = (TextView) findViewById(R.id.detail_tap_for_summary);
+            tapForSummaryView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder popupBuilder = new AlertDialog.Builder(AnimeDetailActivity.this);
+                    TextView tmp = new TextView(AnimeDetailActivity.this);
+                    tmp.setText(summary);
+                    tmp.setTextSize(SYNOPSIS_TEXTSIZE);
+
+                    // left 60, top 30 , right 30, bottom 48
+                    tmp.setPadding(
+                            SYNOPSIS_PADDING_LEFT,
+                            SYNOPSIS_PADDING_TOP,
+                            SYNOPSIS_PADDING_RIGHT,
+                            SYNOPSIS_PADDING_BOTTOM
+                    );
+
+                    popupBuilder.setView(tmp);
+                    popupBuilder.show();
+                }
+            });
 
             progessDialog.dismiss();
         }

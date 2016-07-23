@@ -3,16 +3,17 @@ package com.nguyen.andy.kisetsu;
 import java.util.HashMap;
 
 /**
- * Created by Andy on 7/7/2016.
+ * Represents an Season for the SeasonsCatalogActivity and SeasonsListParser
  */
 
 public class SeasonItem {
+    // constants
     public static final String SUMMER = "Summer";
     public static final String FALL   = "Fall";
     public static final String WINTER = "Winter";
     public static final String SPRING = "Spring";
 
-    public static final HashMap<Integer, String> MONTH_TO_SEASON;
+    public static final HashMap<Integer, String> MONTH_TO_SEASON;  // maps a month to a Season
     private static final int YEAR_LENGTH = 12;
     private static final int SEASON_LENGTH = 3;
 
@@ -32,6 +33,7 @@ public class SeasonItem {
         MONTH_TO_SEASON.put(12, WINTER);
     }
 
+    // fields
     private String name;
     private String season;
     private String timeframe;
@@ -43,6 +45,7 @@ public class SeasonItem {
         this.year = year;
         this.season = MONTH_TO_SEASON.get(month);
 
+        // given the seasn, creates the name and timeframe of that season
         switch (this.season) {
             case SUMMER:
                 this.name = "Summer " + year;

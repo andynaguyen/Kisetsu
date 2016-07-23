@@ -1,9 +1,6 @@
 package com.nguyen.andy.kisetsu.adapters;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +15,7 @@ import java.util.ArrayList;
 import com.nguyen.andy.kisetsu.SeasonItem;
 import com.nguyen.andy.kisetsu.R;
 /**
- * Created by Andy on 7/7/2016.
+ * Adapter. Loads the SeasonItems into the appropriate ListView.
  */
 public class SeasonsListAdapter extends BaseAdapter {
     // Id's for drawable resources (icons)
@@ -28,6 +25,7 @@ public class SeasonsListAdapter extends BaseAdapter {
     private static final int WINTER_ICON_ID;
     private static final int PLACEHOLDER_ICON_ID = R.drawable.base_icon;
 
+    // Allows to switch between different icons at ease
     static {
         int num = 0 ;
 

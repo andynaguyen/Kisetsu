@@ -22,7 +22,7 @@ import com.nguyen.andy.kisetsu.AnimeItem;
 import com.nguyen.andy.kisetsu.R;
 
 /**
- * Created by Andy on 7/13/2016.
+ * Adapter. Loads AnimeItems form the list to the GridView.
  */
 public class AnimeListAdapter extends BaseAdapter{
     ArrayList<AnimeItem> animeList;

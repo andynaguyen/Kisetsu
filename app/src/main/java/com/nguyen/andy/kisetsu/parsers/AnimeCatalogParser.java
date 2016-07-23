@@ -1,7 +1,5 @@
 package com.nguyen.andy.kisetsu.parsers;
 
-import android.widget.ArrayAdapter;
-
 import com.nguyen.andy.kisetsu.AnimeItem;
 
 import org.jsoup.Jsoup;
@@ -11,11 +9,11 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
- * Created by Andy on 7/20/2016.
+ * Responsible for connecting to the URL and scraping the page's contents for information needed
+ * for the AnimeCatalogActivity, using JSoup.
  */
 public class AnimeCatalogParser {
     private Document doc;

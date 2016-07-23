@@ -1,7 +1,5 @@
 package com.nguyen.andy.kisetsu.parsers;
 
-import android.util.Log;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,7 +10,8 @@ import java.io.IOException;
 import java.util.HashMap;
 
 /**
- * Created by Andy on 7/20/2016.
+ * Responsible for connecting to the URL and scraping the page's contents for information needed
+ * for the AnimeDetailActivity, using JSoup.
  */
 public class DetailParser {
     private Document doc;

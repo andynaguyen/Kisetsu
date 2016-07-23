@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -15,11 +16,12 @@ import com.nguyen.andy.kisetsu.adapters.AnimeListAdapter;
 import com.nguyen.andy.kisetsu.parsers.AnimeCatalogParser;
 
 public class AnimeCatalogActivity extends AppCompatActivity {
+    // constants
     private static final String MAL_PREFIX_URL = "http://myanimelist.net/anime/season/";
+    private static final String INTERNET_ERROR_MESSAGE = "No Internet Connection";
 
+    // fields
     ProgressDialog progessDialog;
-
-    // fields for Intent
     String season;
     int year;
 
@@ -28,6 +30,7 @@ public class AnimeCatalogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_anime_catalog);
 
+        // unpack variables from intent
         Bundle bundle = getIntent().getExtras();
         season = bundle.getString("Season");
         year = bundle.getInt("Year");
@@ -38,9 +41,23 @@ public class AnimeCatalogActivity extends AppCompatActivity {
         setTitle(title);
 
         String url = buildURL(season, year);
-        new ParseURLTask().execute(url);
+
+        // if connected to internet, start web scraping.
+        // else, make toast
+        if (ConnectivityCheck.isConnectedToInternet(getApplicationContext())) {
+            new ParseURLTask().execute(url);
+        } else{
+            Toast.makeText(this, INTERNET_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
+        }
     }
 
+    /**
+     * Builds the proper MAL url given a season and year.
+     *  EX: Given "Summer" and "2013", returns "http://myanimelist.net/anime/season/2013/summer"
+     * @param season the given season
+     * @param year the given year
+     * @return the MAL url
+     */
     private String buildURL(String season, int year) {
         // URL FORMAT: PREFIX + SEASON (in lowercase) + '/' + YEAR
         StringBuilder url = new StringBuilder();
@@ -52,12 +69,14 @@ public class AnimeCatalogActivity extends AppCompatActivity {
         return url.toString();
     }
 
+    // AsyncTask dedicated to parsing the HTML
     private class ParseURLTask extends AsyncTask<String, Void, AnimeCatalogParser> {
-        String testUrl = "http://myanimelist.net/anime/season/2017/winter";
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+            // Start progess dialog
             progessDialog = new ProgressDialog(AnimeCatalogActivity.this);
             progessDialog.setTitle("Fetching data");
             progessDialog.setMessage("Loading...");
@@ -74,6 +93,7 @@ public class AnimeCatalogActivity extends AppCompatActivity {
         protected void onPostExecute(AnimeCatalogParser parser) {
             final ArrayList<AnimeItem> animeItems = parser.parseAnimeList();
 
+            // populate gridview with anime series
             final GridView animeGridView = (GridView) findViewById(R.id.anime_catalog);
             animeGridView.setAdapter(new AnimeListAdapter(getApplicationContext(), animeItems));
             animeGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
