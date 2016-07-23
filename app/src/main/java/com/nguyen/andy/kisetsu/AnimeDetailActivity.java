@@ -32,9 +32,11 @@ public class AnimeDetailActivity extends AppCompatActivity {
 
     static {
         RATING_MAP = new HashMap<String, String>();
-        RATING_MAP.put("PG-13 - Teens 13 or older", "PG-13");
         RATING_MAP.put("R - 17+ (violence & profanity)", "R-17+");
+        RATING_MAP.put("R+ - Mild Nudity", "R-17+");
+        RATING_MAP.put("PG-13 - Teens 13 or older", "PG-13");
         RATING_MAP.put("G - All Ages", "G");
+        RATING_MAP.put("None", "None");
     }
 
     private String malUrl;
