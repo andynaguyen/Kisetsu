@@ -2,11 +2,19 @@ package com.nguyen.andy.kisetsu.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -19,9 +27,11 @@ import com.nguyen.andy.kisetsu.R;
 public class AnimeListAdapter extends BaseAdapter{
     ArrayList<AnimeItem> animeList;
     private LayoutInflater layoutInflater;
+    Context context;
 
     public AnimeListAdapter(Context context, ArrayList<AnimeItem> animeData) {
         this.animeList = animeData;
+        this.context = context;
         layoutInflater = LayoutInflater.from(context);
     }
 
@@ -59,13 +69,29 @@ public class AnimeListAdapter extends BaseAdapter{
             convertView = layoutInflater.inflate(R.layout.anime_layout, null);
             holder = new ViewHolder();
             holder.titleView = (TextView) convertView.findViewById(R.id.anime_title);
+            holder.imgView = (ImageView) convertView.findViewById(R.id.catalog_thumbnail);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
         holder.titleView.setText(animeList.get(position).getTitle());
-        holder.titleView.setTextColor(Color.BLACK);  // change this when the picture is loading properly
+
+        /*DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        float dpheight = displayMetrics.heightPixels / displayMetrics.density;
+        float dpwidth  = displayMetrics.widthPixels  / displayMetrics.density;
+
+        double imgWidth = (dpwidth / 2) - 16 - 3;
+        double imgHeight = imgWidth * 1.4;
+
+        Log.d("dp", "height: " + imgHeight + "dp width: " + imgWidth + "dp");
+
+        holder.imgView.getLayoutParams().height = (int) Math.round(imgHeight);
+*/
+        Picasso.with(context)
+                .load(animeList.get(position).getImageUrl())
+                .fit()
+                .into(holder.imgView);
 
         return convertView;
     }
@@ -75,5 +101,6 @@ public class AnimeListAdapter extends BaseAdapter{
      */
     static class ViewHolder {
         TextView titleView;
+        ImageView imgView;
     }
 }
