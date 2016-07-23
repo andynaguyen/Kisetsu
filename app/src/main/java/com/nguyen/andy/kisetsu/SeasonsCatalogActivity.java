@@ -17,7 +17,7 @@ import com.nguyen.andy.kisetsu.adapters.SeasonsListAdapter;
 public class SeasonsCatalogActivity extends AppCompatActivity {
     // constants
     private static final String TAG = "SeasonsCatalogActivity";
-    private static final int NUM_SEASONS = 7;
+    private static final int NUM_SEASONS = 15;
     private static final int NUM_UPCOMING_SEASONS = 2;
     private static final int YEAR_LENGTH = 12;
     private static final int SEASON_LENGTH = 3;

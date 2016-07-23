@@ -11,6 +11,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 import com.nguyen.andy.kisetsu.SeasonItem;
@@ -53,9 +55,11 @@ public class SeasonsListAdapter extends BaseAdapter {
 
     ArrayList<SeasonItem> seasonList;
     private LayoutInflater layoutInflater;
+    private Context context;
 
     public SeasonsListAdapter(Context context, ArrayList<SeasonItem> seasonData) {
         this.seasonList = seasonData;
+        this.context = context;
         layoutInflater = LayoutInflater.from(context);
     }
 
@@ -103,30 +107,32 @@ public class SeasonsListAdapter extends BaseAdapter {
         holder.nameView.setText(seasonList.get(position).getName());
         holder.timeView.setText(seasonList.get(position).getTimeframe());
 
-        // An intermediate variable
-        Resources iconResources = holder.iconView.getContext().getResources();
-
         // Get the imageView set to the appropriate season icon
         switch (seasonList.get(position).getSeason()) {
             case SeasonItem.SUMMER:
-                Drawable summerIcon = ResourcesCompat.getDrawable(iconResources, SUMMER_ICON_ID, null);
-                holder.iconView.setImageDrawable(summerIcon);
+                Picasso.with(context)
+                        .load(SUMMER_ICON_ID)
+                        .into(holder.iconView);
                 break;
             case SeasonItem.FALL:
-                Drawable fallIcon = ResourcesCompat.getDrawable(iconResources, FALL_ICON_ID, null);
-                holder.iconView.setImageDrawable(fallIcon);
+                Picasso.with(context)
+                        .load(FALL_ICON_ID)
+                        .into(holder.iconView);
                 break;
             case SeasonItem.WINTER:
-                Drawable winterIcon = ResourcesCompat.getDrawable(iconResources, WINTER_ICON_ID, null);
-                holder.iconView.setImageDrawable(winterIcon);
+                Picasso.with(context)
+                        .load(WINTER_ICON_ID)
+                        .into(holder.iconView);
                 break;
             case SeasonItem.SPRING:
-                Drawable springIcon = ResourcesCompat.getDrawable(iconResources, SPRING_ICON_ID, null);
-                holder.iconView.setImageDrawable(springIcon);
+                Picasso.with(context)
+                        .load(SPRING_ICON_ID)
+                        .into(holder.iconView);
                 break;
             default:
-                Drawable placeholderIcon = ResourcesCompat.getDrawable(iconResources, PLACEHOLDER_ICON_ID, null);
-                holder.iconView.setImageDrawable(placeholderIcon);
+                Picasso.with(context)
+                        .load(PLACEHOLDER_ICON_ID)
+                        .into(holder.iconView);
                 break;
         }
 
