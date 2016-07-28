@@ -62,9 +62,20 @@ public class AnimeDetailActivity extends AppCompatActivity {
 
         setTitle("[  ] " + title);
 
+        /* Removed FAB for a more traditional button
         // make FAB
         FloatingActionButton detailFab = (FloatingActionButton) findViewById(R.id.detail_fab);
         detailFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse(malUrl);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        }); */
+
+        TextView malButton = (TextView) findViewById(R.id.mal_button);
+        malButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Uri uri = Uri.parse(malUrl);
