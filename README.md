@@ -9,4 +9,4 @@ Try out a demo online: https://appetize.io/app/hcb846ryk0qb0cxkt6wyxnc904
 
 Screenshots
 -----------
-![Screenshots](Screenshots/screenshots.png)
+![Screenshots](https://raw.githubusercontent.com/andynaguyen/Kisetsu/master/Screenshots/screenshots.png?token=AG6OlZzXls6yU08X2DpCbqqkK1F489Y5ks5XorrbwA%3D%3D)
