@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.SearchView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -24,6 +25,7 @@ public class AnimeCatalogActivity extends AppCompatActivity {
     ProgressDialog progessDialog;
     String season;
     int year;
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +97,8 @@ public class AnimeCatalogActivity extends AppCompatActivity {
 
             // populate gridview with anime series
             final GridView animeGridView = (GridView) findViewById(R.id.anime_catalog);
-            animeGridView.setAdapter(new AnimeListAdapter(getApplicationContext(), animeItems));
+            final AnimeListAdapter adapter = new AnimeListAdapter(getApplicationContext(), animeItems);
+            animeGridView.setAdapter(adapter);
             animeGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -108,6 +111,22 @@ public class AnimeCatalogActivity extends AppCompatActivity {
                     intent.putExtra("SeasonFrom", season);
                     intent.putExtra("YearFrom", year);
                     startActivity(intent);
+                }
+            });
+
+            // initialize SearchView
+            searchView = (SearchView) findViewById(R.id.search);
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    adapter.resetData();
+                    adapter.getFilter().filter(newText.toString());
+                    return false;
                 }
             });
 

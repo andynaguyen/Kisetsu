@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,13 +26,16 @@ import com.nguyen.andy.kisetsu.R;
 /**
  * Adapter. Loads AnimeItems form the list to the GridView.
  */
-public class AnimeListAdapter extends BaseAdapter{
+public class AnimeListAdapter extends BaseAdapter implements Filterable {
     ArrayList<AnimeItem> animeList;
+    ArrayList<AnimeItem> originalAnimeList;
     private LayoutInflater layoutInflater;
+    private AnimeFilter animeFilter;
     Context context;
 
     public AnimeListAdapter(Context context, ArrayList<AnimeItem> animeData) {
         this.animeList = animeData;
+        this.originalAnimeList = animeData;
         this.context = context;
         layoutInflater = LayoutInflater.from(context);
     }
@@ -102,5 +107,55 @@ public class AnimeListAdapter extends BaseAdapter{
     static class ViewHolder {
         TextView titleView;
         ImageView imgView;
+    }
+
+    public void resetData() {
+        animeList = originalAnimeList;
+    }
+
+    @Override
+    public Filter getFilter() {
+        if (animeFilter == null) {
+            animeFilter = new AnimeFilter();
+        }
+        return animeFilter;
+    }
+
+    private class AnimeFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            String query = constraint.toString().toLowerCase();
+            FilterResults results = new FilterResults();
+
+            if (constraint == null || constraint.length() == 0) {
+                results.values = animeList;
+                results.count = animeList.size();
+
+                return results;
+            }
+
+            ArrayList<AnimeItem> newList = new ArrayList<AnimeItem>();
+
+            for (AnimeItem anime : animeList) {
+                if (anime.getTitle().toLowerCase().contains(query)) {
+                    newList.add(anime);
+                }
+            }
+
+            results.values = newList;
+            results.count = newList.size();
+
+            for (AnimeItem item : newList)
+                Log.d("filterList", item.getTitle());
+
+            return results;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            animeList = (ArrayList<AnimeItem>) results.values;
+            notifyDataSetChanged();
+        }
     }
 }
