@@ -11,11 +11,11 @@
 
     <SearchView
         android:id="@+id/search"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="6dp"
-        android:queryHint="Unlimited Search Works"></SearchView>
+        android:queryHint="Unlimited Search Works"/>
 
     <GridView
         android:id="@+id/anime_catalog"
@@ -25,5 +25,5 @@
         android:numColumns="2"
         android:verticalSpacing="12dp"
         android:horizontalSpacing="12dp"
-        android:gravity="center"></GridView>
+        android:gravity="center"/>
 </RelativeLayout>

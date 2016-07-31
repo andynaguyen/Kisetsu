@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".AnimeCatalogActivity" />
-        <activity android:name=".AnimeDetailActivity"></activity>
+        <activity android:name=".AnimeDetailActivity"/>
     </application>
 
 </manifest>

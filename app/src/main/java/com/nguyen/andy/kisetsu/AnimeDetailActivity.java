@@ -8,10 +8,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.app.ProgressDialog;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.squareup.picasso.Picasso;
 
@@ -23,7 +27,7 @@ public class AnimeDetailActivity extends AppCompatActivity {
     // constants
     private static final int SYNOPSIS_PADDING_LEFT = 54;
     private static final int SYNOPSIS_PADDING_TOP = 30;
-    private static final int SYNOPSIS_PADDING_RIGHT = 30;
+    private static final int SYNOPSIS_PADDING_RIGHT = 36;
     private static final int SYNOPSIS_PADDING_BOTTOM = 42;
     private static final int SYNOPSIS_TEXTSIZE = 18;
     private static final HashMap<String, String> RATING_MAP; // simplifies the parsed Ratings
@@ -44,6 +48,7 @@ public class AnimeDetailActivity extends AppCompatActivity {
     private String summary;
     private String seasonFrom;
     private int yearFrom;
+    private boolean isFirstVisible = true;  // for ViewFlipper
 
     ProgressDialog progessDialog;
 
@@ -205,7 +210,7 @@ public class AnimeDetailActivity extends AppCompatActivity {
                     tmp.setText(summary);
                     tmp.setTextSize(SYNOPSIS_TEXTSIZE);
 
-                    // left 60, top 30 , right 30, bottom 48
+                    // left 60, top 30 , right 36, bottom 48
                     tmp.setPadding(
                             SYNOPSIS_PADDING_LEFT,
                             SYNOPSIS_PADDING_TOP,
@@ -218,7 +223,42 @@ public class AnimeDetailActivity extends AppCompatActivity {
                 }
             });
 
+            // ViewFlipper
+            ViewFlipper flipper = (ViewFlipper) findViewById(R.id.flipper);
+            RelativeLayout scoreLayout = (RelativeLayout) findViewById(R.id.score_stats_layout);
+            RelativeLayout otherLayout = (RelativeLayout) findViewById(R.id.other_stats_layout);
+
+            scoreLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showNext();
+                }
+            });
+
+            otherLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showNext();
+                }
+            });
+
             progessDialog.dismiss();
+        }
+
+        private void showNext() {
+            ViewFlipper flipper = (ViewFlipper) findViewById(R.id.flipper);
+            flipper.setInAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_left));
+            flipper.setOutAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_right));
+            flipper.showNext();
+        }
+
+        private void flip() {
+            if (isFirstVisible) {
+                isFirstVisible = false;
+            } else {
+                isFirstVisible = true;
+            }
+            ((ViewFlipper) findViewById(R.id.flipper)).showNext();
         }
     }
 }

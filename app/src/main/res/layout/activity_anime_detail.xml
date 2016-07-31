@@ -41,106 +41,206 @@
         android:elevation="6dp"
         />
 
-    <RelativeLayout
+    <ViewFlipper
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:id="@+id/score_stats_layout"
-        android:background="#FFFFFF"
-        android:elevation="2dp">
+        android:id="@+id/flipper"
+        android:layout_below="@+id/detail_tap_for_summary">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="6dp"
-            android:id="@+id/score_stats_headers"
-            android:background="@color/colorPrimary"
-            android:weightSum="3"
-            android:elevation="2dp">
+            android:layout_marginTop="0dp"
+            android:id="@+id/score_stats_layout">
 
-            <TextView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:id="@+id/ranked_header"
-                android:text="RANKED"
-                android:textSize="16dp"
-                android:textColor="#FFFFFF"
-                android:gravity="center_horizontal"
-                android:layout_weight="1"/>
+                android:paddingTop="6dp"
+                android:id="@+id/score_stats_headers"
+                android:background="@color/colorPrimary"
+                android:weightSum="3"
+                android:elevation="2dp">
 
-            <TextView
-                android:layout_width="0dp"
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:id="@+id/ranked_header"
+                    android:text="RANKED"
+                    android:textSize="16dp"
+                    android:textColor="#FFFFFF"
+                    android:gravity="center_horizontal"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:id="@+id/score_header"
+                    android:text="SCORE"
+                    android:textSize="16dp"
+                    android:textColor="#FFFFFF"
+                    android:gravity="center_horizontal"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:id="@+id/popularity_header"
+                    android:text="POPULARITY"
+                    android:textSize="16dp"
+                    android:textColor="#FFFFFF"
+                    android:gravity="center_horizontal"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:id="@+id/score_header"
-                android:text="SCORE"
-                android:textSize="16dp"
-                android:textColor="#FFFFFF"
-                android:gravity="center_horizontal"
-                android:layout_weight="1"/>
+                android:layout_below="@+id/score_stats_headers"
+                android:layout_marginTop="-6dp"
+                android:layout_marginBottom="6dp"
+                android:paddingBottom="4dp"
+                android:background="#FFFFFF"
+                android:elevation="1dp"
+                android:id="@+id/score_stats"
+                android:weightSum="3">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/detail_ranked"
+                    android:text=""
+                    android:textSize="16dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_horizontal"
+                    android:layout_weight="1"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:id="@+id/popularity_header"
-                android:text="POPULARITY"
-                android:textSize="16dp"
-                android:textColor="#FFFFFF"
-                android:gravity="center_horizontal"
-                android:layout_weight="1"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/detail_score"
+                    android:text=""
+                    android:textSize="16dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_horizontal"
+                    android:layout_weight="1"/>
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/detail_popularity"
+                    android:text=""
+                    android:textSize="16dp"
+                    android:gravity="center_horizontal"
+                    android:layout_weight="1"/>
+            </LinearLayout>
 
-        <LinearLayout
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/score_stats_headers"
-            android:layout_marginTop="-6dp"
-            android:layout_marginBottom="6dp"
-            android:id="@+id/score_stats"
-            android:weightSum="3">
-            <TextView
-                android:layout_width="0dp"
+            android:layout_marginTop="0dp"
+            android:id="@+id/other_stats_layout">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/detail_ranked"
-                android:text=""
-                android:textSize="16dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
-                android:layout_weight="1"/>
+                android:paddingTop="6dp"
+                android:id="@+id/other_stats_header"
+                android:background="@color/colorPrimary"
+                android:weightSum="3"
+                android:elevation="2dp">
 
-            <TextView
-                android:layout_width="0dp"
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:id="@+id/rating_header"
+                    android:text="RATING"
+                    android:textSize="16dp"
+                    android:textColor="#FFFFFF"
+                    android:gravity="center_horizontal"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:id="@+id/episode_header"
+                    android:text="EPISODES"
+                    android:textSize="16dp"
+                    android:textColor="#FFFFFF"
+                    android:gravity="center_horizontal"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:id="@+id/duration_header"
+                    android:text="DURATION"
+                    android:textSize="16dp"
+                    android:textColor="#FFFFFF"
+                    android:gravity="center_horizontal"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/detail_score"
-                android:text=""
-                android:textSize="16dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
-                android:layout_weight="1"/>
+                android:layout_below="@+id/other_stats_header"
+                android:layout_marginTop="-6dp"
+                android:layout_marginBottom="6dp"
+                android:paddingBottom="4dp"
+                android:background="#FFFFFF"
+                android:elevation="1dp"
+                android:id="@+id/other_stats"
+                android:weightSum="3">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/detail_rating"
+                    android:text=""
+                    android:textSize="16dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_horizontal"
+                    android:layout_weight="1"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:id="@+id/detail_popularity"
-                android:text=""
-                android:textSize="16dp"
-                android:gravity="center_horizontal"
-                android:layout_weight="1"/>
-        </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/detail_episodse"
+                    android:text=""
+                    android:textSize="16dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_horizontal"
+                    android:layout_weight="1"/>
 
-    </RelativeLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/detail_duration"
+                    android:text=""
+                    android:textSize="16dp"
+                    android:gravity="center_horizontal"
+                    android:layout_weight="1"/>
+            </LinearLayout>
 
+        </RelativeLayout>
+    </ViewFlipper>
 
     <ImageView
         android:layout_width="140dp"
         android:layout_height="196dp"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="2.1dp"
-        android:layout_below="@+id/score_stats_layout"
+        android:layout_marginTop="0.2dp"
         android:id="@+id/thumbnail"
         android:elevation="2dp"/>
 
@@ -257,100 +357,6 @@
         android:layout_toRightOf="@+id/thumbnail"
         android:layout_toEndOf="@+id/thumbnail" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/detail_tap_for_summary"
-        android:layout_marginTop="0dp"
-        android:background="#FFFFFF"
-        android:elevation="1dp"
-        android:id="@+id/relativeLayout">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="6dp"
-            android:id="@+id/other_stats_header"
-            android:background="@color/colorPrimary"
-            android:weightSum="3"
-            android:elevation="2dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:id="@+id/rating_header"
-                android:text="RATING"
-                android:textSize="16dp"
-                android:textColor="#FFFFFF"
-                android:gravity="center_horizontal"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:id="@+id/episode_header"
-                android:text="EPISODES"
-                android:textSize="16dp"
-                android:textColor="#FFFFFF"
-                android:gravity="center_horizontal"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:id="@+id/duration_header"
-                android:text="DURATION"
-                android:textSize="16dp"
-                android:textColor="#FFFFFF"
-                android:gravity="center_horizontal"
-                android:layout_weight="1"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/other_stats_header"
-            android:layout_marginTop="-6dp"
-            android:layout_marginBottom="6dp"
-            android:id="@+id/other_stats"
-            android:weightSum="3">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/detail_rating"
-                android:text=""
-                android:textSize="16dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/detail_episodse"
-                android:text=""
-                android:textSize="16dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:id="@+id/detail_duration"
-                android:text=""
-                android:textSize="16dp"
-                android:gravity="center_horizontal"
-                android:layout_weight="1"/>
-        </LinearLayout>
-
-    </RelativeLayout>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -359,7 +365,7 @@
         android:textColor="#000000"
         android:textStyle="italic"
         android:id="@+id/source_header"
-        android:layout_below="@+id/relativeLayout"
+        android:layout_below="@+id/flipper"
         android:layout_marginTop="6dp"
         android:layout_marginLeft="6dp"
         android:layout_alignParentLeft="true"
