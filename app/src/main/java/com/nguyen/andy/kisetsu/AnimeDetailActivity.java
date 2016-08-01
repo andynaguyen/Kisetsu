@@ -1,5 +1,6 @@
 package com.nguyen.andy.kisetsu;
 
+import android.app.ActionBar;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -7,6 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Intent;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -67,6 +72,9 @@ public class AnimeDetailActivity extends AppCompatActivity {
 
         setTitle("[  ] " + title);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        setSupportActionBar(toolbar);
+
         /* Removed FAB for a more traditional button
         // make FAB
         FloatingActionButton detailFab = (FloatingActionButton) findViewById(R.id.detail_fab);
@@ -79,6 +87,7 @@ public class AnimeDetailActivity extends AppCompatActivity {
             }
         }); */
 
+        // Create MAL button
         TextView malButton = (TextView) findViewById(R.id.mal_button);
         malButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +106,27 @@ public class AnimeDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_items, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_mal_link:
+                Uri uri = Uri.parse(malUrl);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     // asyncTask dedicated to parsing the HTML
     private class ParseURLTask extends AsyncTask<String, Void, DetailParser> {

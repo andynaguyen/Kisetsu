@@ -3,8 +3,13 @@ package com.nguyen.andy.kisetsu;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.SearchView;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,6 +31,8 @@ public class AnimeCatalogActivity extends AppCompatActivity {
     String season;
     int year;
     SearchView searchView;
+    GridView animeGridView;
+    AnimeListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +49,9 @@ public class AnimeCatalogActivity extends AppCompatActivity {
                 season.substring(0,1).toUpperCase() + season.substring(1).toLowerCase() + " " + year;
         setTitle(title);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.anime_toolbar);
+        setSupportActionBar(toolbar);
+
         String url = buildURL(season, year);
 
         // if connected to internet, start web scraping.
@@ -51,6 +61,31 @@ public class AnimeCatalogActivity extends AppCompatActivity {
         } else{
             Toast.makeText(this, INTERNET_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.anime_catalog_actions, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        android.support.v7.widget.SearchView sv = (android.support.v7.widget.SearchView) MenuItemCompat.getActionView(searchItem);
+        sv.setQueryHint("Unlimited Search Works");
+
+        sv.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.resetData();
+                adapter.getFilter().filter(newText.toString());
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 
     /**
@@ -96,8 +131,8 @@ public class AnimeCatalogActivity extends AppCompatActivity {
             final ArrayList<AnimeItem> animeItems = parser.parseAnimeList();
 
             // populate gridview with anime series
-            final GridView animeGridView = (GridView) findViewById(R.id.anime_catalog);
-            final AnimeListAdapter adapter = new AnimeListAdapter(getApplicationContext(), animeItems);
+            animeGridView = (GridView) findViewById(R.id.anime_catalog);
+            adapter = new AnimeListAdapter(getApplicationContext(), animeItems);
             animeGridView.setAdapter(adapter);
             animeGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -114,7 +149,7 @@ public class AnimeCatalogActivity extends AppCompatActivity {
                 }
             });
 
-            // initialize SearchView
+            /*/ initialize SearchView
             searchView = (SearchView) findViewById(R.id.search);
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
@@ -128,7 +163,7 @@ public class AnimeCatalogActivity extends AppCompatActivity {
                     adapter.getFilter().filter(newText.toString());
                     return false;
                 }
-            });
+            });*/
 
             progessDialog.dismiss();
         }
