@@ -1,6 +1,5 @@
 package com.nguyen.andy.kisetsu;
 
-import android.app.ActionBar;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -9,13 +8,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Intent;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.app.ProgressDialog;
@@ -32,7 +31,7 @@ public class AnimeDetailActivity extends AppCompatActivity {
     // constants
     private static final int SYNOPSIS_PADDING_LEFT = 54;
     private static final int SYNOPSIS_PADDING_TOP = 30;
-    private static final int SYNOPSIS_PADDING_RIGHT = 36;
+    private static final int SYNOPSIS_PADDING_RIGHT = 42;
     private static final int SYNOPSIS_PADDING_BOTTOM = 42;
     private static final int SYNOPSIS_TEXTSIZE = 18;
     private static final HashMap<String, String> RATING_MAP; // simplifies the parsed Ratings
@@ -53,7 +52,6 @@ public class AnimeDetailActivity extends AppCompatActivity {
     private String summary;
     private String seasonFrom;
     private int yearFrom;
-    private boolean isFirstVisible = true;  // for ViewFlipper
 
     ProgressDialog progessDialog;
 
@@ -75,26 +73,67 @@ public class AnimeDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
-        /* Removed FAB for a more traditional button
         // make FAB
         FloatingActionButton detailFab = (FloatingActionButton) findViewById(R.id.detail_fab);
         detailFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = Uri.parse(malUrl);
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-            }
-        }); */
+                AlertDialog.Builder popupBuilder = new AlertDialog.Builder(AnimeDetailActivity.this);
+                TextView tmp = new TextView(AnimeDetailActivity.this);
+                tmp.setText(summary);
+                tmp.setTextSize(SYNOPSIS_TEXTSIZE);
 
-        // Create MAL button
-        TextView malButton = (TextView) findViewById(R.id.mal_button);
-        malButton.setOnClickListener(new View.OnClickListener() {
+                // left 60, top 30 , right 30, bottom 48
+                tmp.setPadding(
+                        SYNOPSIS_PADDING_LEFT,
+                        SYNOPSIS_PADDING_TOP,
+                        SYNOPSIS_PADDING_RIGHT,
+                        SYNOPSIS_PADDING_BOTTOM
+                );
+
+                popupBuilder.setView(tmp);
+                popupBuilder.show();
+            }
+        });
+
+        // load image for thumbnail and set onclicklistener
+        ImageView thumbnailView= (ImageView) findViewById(R.id.thumbnail);
+        Picasso.with(getApplicationContext())
+                .load(imgUrl)
+                .fit()
+                .into(thumbnailView);
+        thumbnailView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = Uri.parse(malUrl);
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
+                popupZoom();
+            }
+        });
+
+        // set onclicklistener for TAP FOR ZOOM
+        TextView tapForZoomView = (TextView) findViewById(R.id.detail_tap_to_zoom);
+        tapForZoomView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupZoom();
+            }
+        });
+
+        // ViewFlipper
+        ViewFlipper flipper = (ViewFlipper) findViewById(R.id.flipper);
+        RelativeLayout scoreLayout = (RelativeLayout) findViewById(R.id.score_stats_layout);
+        RelativeLayout otherLayout = (RelativeLayout) findViewById(R.id.other_stats_layout);
+
+        scoreLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showNext();
+            }
+        });
+
+        otherLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showNext();
             }
         });
 
@@ -127,6 +166,33 @@ public class AnimeDetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Creates a new popup that shows a zoomed in picture of the thumbnail.
+     */
+    private void popupZoom() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(AnimeDetailActivity.this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        LayoutInflater factory = LayoutInflater.from(AnimeDetailActivity.this);
+
+        final View lview = factory.inflate(R.layout.image_dialog, null);
+        ImageView dialogImg = (ImageView) lview.findViewById(R.id.dialog_image);
+        Picasso.with(getApplicationContext())
+                .load(imgUrl)
+                .fit()
+                .centerInside()
+                .into(dialogImg);
+        builder.setView(lview);
+        builder.show();
+    }
+
+    /**
+     * Shows the next stats table (slides left to right)
+     */
+    private void showNext() {
+        ViewFlipper flipper = (ViewFlipper) findViewById(R.id.flipper);
+        flipper.setInAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_left));
+        flipper.setOutAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_right));
+        flipper.showNext();
+    }
 
     // asyncTask dedicated to parsing the HTML
     private class ParseURLTask extends AsyncTask<String, Void, DetailParser> {
@@ -170,12 +236,12 @@ public class AnimeDetailActivity extends AppCompatActivity {
             setTitle("[" + type + "] " + title);
             AnimeDetailActivity.this.summary = synopsis;
 
-            // modify the strings
+            // modify the strings for score and ranked
             score = score.split("\\*")[0];
             ranked = ranked.split("\\*")[0];
             rating = RATING_MAP.get(rating);
 
-            // set text for all the views
+            // set text for all the TextViews
             TextView titleTV = (TextView) findViewById(R.id.detail_title);
             titleTV.setText(title);
             TextView scoreTV = (TextView) findViewById(R.id.detail_score);
@@ -203,92 +269,7 @@ public class AnimeDetailActivity extends AppCompatActivity {
             TextView genresTV = (TextView) findViewById(R.id.detail_genres);
             genresTV.setText(genres);
 
-            // load image for thumbnail and set onclicklistener
-            ImageView thumbnailView= (ImageView) findViewById(R.id.thumbnail);
-            Picasso.with(getApplicationContext())
-                    .load(imgUrl)
-                    .fit()
-                    .into(thumbnailView);
-            thumbnailView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder popupBuilder = new AlertDialog.Builder(AnimeDetailActivity.this);
-                    TextView tmp = new TextView(AnimeDetailActivity.this);
-                    tmp.setText(summary);
-                    tmp.setTextSize(SYNOPSIS_TEXTSIZE);
-
-                    // left 60, top 30 , right 30, bottom 48
-                    tmp.setPadding(
-                            SYNOPSIS_PADDING_LEFT,
-                            SYNOPSIS_PADDING_TOP,
-                            SYNOPSIS_PADDING_RIGHT,
-                            SYNOPSIS_PADDING_BOTTOM
-                    );
-
-                    popupBuilder.setView(tmp);
-                    popupBuilder.show();
-                }
-            });
-
-            // set onclicklistener for TAP FOR SUMMARY
-            TextView tapForSummaryView = (TextView) findViewById(R.id.detail_tap_for_summary);
-            tapForSummaryView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder popupBuilder = new AlertDialog.Builder(AnimeDetailActivity.this);
-                    TextView tmp = new TextView(AnimeDetailActivity.this);
-                    tmp.setText(summary);
-                    tmp.setTextSize(SYNOPSIS_TEXTSIZE);
-
-                    // left 60, top 30 , right 36, bottom 48
-                    tmp.setPadding(
-                            SYNOPSIS_PADDING_LEFT,
-                            SYNOPSIS_PADDING_TOP,
-                            SYNOPSIS_PADDING_RIGHT,
-                            SYNOPSIS_PADDING_BOTTOM
-                    );
-
-                    popupBuilder.setView(tmp);
-                    popupBuilder.show();
-                }
-            });
-
-            // ViewFlipper
-            ViewFlipper flipper = (ViewFlipper) findViewById(R.id.flipper);
-            RelativeLayout scoreLayout = (RelativeLayout) findViewById(R.id.score_stats_layout);
-            RelativeLayout otherLayout = (RelativeLayout) findViewById(R.id.other_stats_layout);
-
-            scoreLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showNext();
-                }
-            });
-
-            otherLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showNext();
-                }
-            });
-
             progessDialog.dismiss();
-        }
-
-        private void showNext() {
-            ViewFlipper flipper = (ViewFlipper) findViewById(R.id.flipper);
-            flipper.setInAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_left));
-            flipper.setOutAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_right));
-            flipper.showNext();
-        }
-
-        private void flip() {
-            if (isFirstVisible) {
-                isFirstVisible = false;
-            } else {
-                isFirstVisible = true;
-            }
-            ((ViewFlipper) findViewById(R.id.flipper)).showNext();
         }
     }
 }
