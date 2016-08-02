@@ -23,6 +23,7 @@ import android.widget.ViewFlipper;
 
 import com.squareup.picasso.Picasso;
 
+import com.bluejamesbond.text.DocumentView;
 import java.util.HashMap;
 
 import com.nguyen.andy.kisetsu.parsers.DetailParser;
@@ -33,7 +34,6 @@ public class AnimeDetailActivity extends AppCompatActivity {
     private static final int SYNOPSIS_PADDING_TOP = 30;
     private static final int SYNOPSIS_PADDING_RIGHT = 42;
     private static final int SYNOPSIS_PADDING_BOTTOM = 42;
-    private static final int SYNOPSIS_TEXTSIZE = 18;
     private static final HashMap<String, String> RATING_MAP; // simplifies the parsed Ratings
 
     static {
@@ -78,21 +78,7 @@ public class AnimeDetailActivity extends AppCompatActivity {
         detailFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder popupBuilder = new AlertDialog.Builder(AnimeDetailActivity.this);
-                TextView tmp = new TextView(AnimeDetailActivity.this);
-                tmp.setText(summary);
-                tmp.setTextSize(SYNOPSIS_TEXTSIZE);
-
-                // left 60, top 30 , right 30, bottom 48
-                tmp.setPadding(
-                        SYNOPSIS_PADDING_LEFT,
-                        SYNOPSIS_PADDING_TOP,
-                        SYNOPSIS_PADDING_RIGHT,
-                        SYNOPSIS_PADDING_BOTTOM
-                );
-
-                popupBuilder.setView(tmp);
-                popupBuilder.show();
+                popupSummary();
             }
         });
 
@@ -167,7 +153,7 @@ public class AnimeDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Creates a new popup that shows a zoomed in picture of the thumbnail.
+     * Creates a new popup dialog that shows a zoomed in picture of the thumbnail.
      */
     private void popupZoom() {
         AlertDialog.Builder builder = new AlertDialog.Builder(AnimeDetailActivity.this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
@@ -180,6 +166,21 @@ public class AnimeDetailActivity extends AppCompatActivity {
                 .fit()
                 .centerInside()
                 .into(dialogImg);
+        builder.setView(lview);
+        builder.show();
+    }
+
+    /**
+     * Creates a new popup dialog that shows the summary.
+     */
+    private void popupSummary() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(AnimeDetailActivity.this);
+        LayoutInflater factory = LayoutInflater.from(AnimeDetailActivity.this);
+
+        final View lview = factory.inflate(R.layout.synopsis_dialog, null);
+        DocumentView synopsis = (DocumentView) lview.findViewById(R.id.dialog_synopsis);
+        synopsis.setText(summary);
+
         builder.setView(lview);
         builder.show();
     }

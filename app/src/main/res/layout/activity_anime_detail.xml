@@ -235,7 +235,7 @@
         android:layout_width="140dp"
         android:layout_height="196dp"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="0.2dp"
+        android:layout_marginTop="0dp"
         android:id="@+id/thumbnail"
         android:layout_below="@+id/detail_toolbar"
         android:elevation="2dp"/>
@@ -254,104 +254,90 @@
         android:textColor="#FFFFFF"
         android:elevation="2dp"/>
 
-    <TextView
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/thumbnail"
         android:layout_toRightOf="@+id/thumbnail"
-        android:layout_toEndOf="@+id/thumbnail"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="6dp"
-        android:text="TITLE"
-        android:textSize="20dp"
-        android:textColor="#000000"
-        android:textStyle="italic"
-        android:id="@+id/title_header" />
+        android:layout_below="@+id/detail_toolbar"
+        android:layout_alignBottom="@+id/detail_tap_to_zoom"
+        android:layout_alignParentRight="true"
+        >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:id="@+id/detail_title"
-        android:layout_below="@+id/title_header"
-        android:layout_toRightOf="@+id/thumbnail"
-        android:layout_toEndOf="@+id/thumbnail"
-        android:layout_marginLeft="6dp"
-        android:textSize="15dp"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:orientation="vertical"
+            android:layout_centerVertical="true">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TITLE"
+                android:textSize="20dp"
+                android:textColor="#000000"
+                android:textStyle="italic"
+                android:id="@+id/title_header" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/detail_title"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textSize="15dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="MEDIA TYPE"
-        android:textColor="#000000"
-        android:textSize="20dp"
-        android:textStyle="italic"
-        android:id="@+id/media_type_header"
-        android:layout_marginLeft="6dp"
-        android:layout_below="@+id/detail_title"
-        android:layout_toRightOf="@+id/thumbnail"
-        android:layout_toEndOf="@+id/thumbnail" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MEDIA TYPE"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:textStyle="italic"
+                android:id="@+id/media_type_header" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:id="@+id/detail_media_type"
-        android:textSize="15dp"
-        android:layout_marginLeft="6dp"
-        android:layout_below="@+id/media_type_header"
-        android:layout_toRightOf="@+id/thumbnail"
-        android:layout_toEndOf="@+id/thumbnail" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/detail_media_type"
+                android:textSize="15dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="STATUS"
-        android:textSize="20dp"
-        android:textColor="#000000"
-        android:textStyle="italic"
-        android:id="@+id/status_heder"
-        android:layout_marginLeft="6dp"
-        android:layout_below="@+id/detail_media_type"
-        android:layout_toRightOf="@+id/thumbnail"
-        android:layout_toEndOf="@+id/thumbnail" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="STATUS"
+                android:textSize="20dp"
+                android:textColor="#000000"
+                android:textStyle="italic"
+                android:id="@+id/status_heder" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:id="@+id/detail_status"
-        android:textSize="15dp"
-        android:layout_marginLeft="6dp"
-        android:layout_below="@+id/status_heder"
-        android:layout_toRightOf="@+id/thumbnail"
-        android:layout_toEndOf="@+id/thumbnail" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/detail_status"
+                android:textSize="15dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="AIRED ON"
-        android:textSize="20dp"
-        android:textColor="#000000"
-        android:textStyle="italic"
-        android:id="@+id/aired_on_header"
-        android:layout_marginLeft="6dp"
-        android:layout_below="@+id/detail_status"
-        android:layout_toRightOf="@+id/thumbnail"
-        android:layout_toEndOf="@+id/thumbnail" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AIRED ON"
+                android:textSize="20dp"
+                android:textColor="#000000"
+                android:textStyle="italic"
+                android:id="@+id/aired_on_header" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:id="@+id/detail_aired_on"
-        android:textSize="15dp"
-        android:layout_marginLeft="6dp"
-        android:layout_below="@+id/aired_on_header"
-        android:layout_toRightOf="@+id/thumbnail"
-        android:layout_toEndOf="@+id/thumbnail" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/detail_aired_on"
+                android:textSize="15dp" />
+        </LinearLayout>
+    </RelativeLayout>
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -387,7 +373,8 @@
         android:textSize="18dp"
         android:textStyle="italic"
         android:id="@+id/studios_header"
-        android:layout_below="@+id/source_header"
+        android:layout_below="@+id/detail_source"
+        android:layout_marginTop="6dp"
         android:layout_marginLeft="9dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -411,9 +398,10 @@
         android:textSize="18dp"
         android:textStyle="italic"
         android:id="@+id/genres_header"
-        android:layout_below="@+id/studios_header"
+        android:layout_below="@+id/detail_studios"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_marginTop="6dp"
         android:layout_marginLeft="9dp"/>
 
     <TextView

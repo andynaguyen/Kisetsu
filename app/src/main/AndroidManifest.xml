@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".AnimeCatalogActivity" />
-        <activity android:name=".AnimeDetailActivity"/>
+        <activity android:name=".AnimeDetailActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
