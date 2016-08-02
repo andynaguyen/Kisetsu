@@ -7,10 +7,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/dialog_synopsis"
-        ext:documentView_insetPadding="10dp"
+        ext:documentView_insetPaddingLeft="6dp"
+        ext:documentView_insetPaddingRight="6dp"
+        ext:documentView_insetPaddingTop="12dp"
+        ext:documentView_insetPaddingBottom="12dp"
         ext:documentView_textSize="14dp"
         ext:documentView_textFormat="plain"
         ext:documentView_textAlignment="justified"
-        ext:documentView_offsetX="19dp"/>
+        ext:documentView_offsetX="18dp"/>
 
 </RelativeLayout>
