@@ -24,12 +24,25 @@ import android.widget.ViewFlipper;
 import com.squareup.picasso.Picasso;
 
 import com.bluejamesbond.text.DocumentView;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 
 import com.nguyen.andy.kisetsu.parsers.DetailParser;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class AnimeDetailActivity extends AppCompatActivity {
     // constants
+    private static final String KISETSU_PREFIX = "http://kisetsu.pythonanywhere.com/anime/";
     private static final int SYNOPSIS_PADDING_LEFT = 54;
     private static final int SYNOPSIS_PADDING_TOP = 30;
     private static final int SYNOPSIS_PADDING_RIGHT = 42;
@@ -123,10 +136,12 @@ public class AnimeDetailActivity extends AppCompatActivity {
             }
         });
 
+        String url = getKisetsuURL();
+
         // if connected to internet, start web scraping.
         // else, make toast
         if (ConnectivityCheck.isConnectedToInternet(getApplicationContext())) {
-            new ParseURLTask().execute(malUrl);
+            new ParseURLTask().execute(url);
         } else{
             Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show();
         }
@@ -150,6 +165,13 @@ public class AnimeDetailActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Get the anime's MAL id from the url
+     */
+    public String getKisetsuURL() {
+        return KISETSU_PREFIX + malUrl.split("anime/")[1];
     }
 
     /**
@@ -196,7 +218,7 @@ public class AnimeDetailActivity extends AppCompatActivity {
     }
 
     // asyncTask dedicated to parsing the HTML
-    private class ParseURLTask extends AsyncTask<String, Void, DetailParser> {
+    private class ParseURLTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -210,37 +232,97 @@ public class AnimeDetailActivity extends AppCompatActivity {
         }
 
         @Override
-        protected DetailParser doInBackground(String... params) {
-            return new DetailParser(params[0]);
+        protected String doInBackground(String... params) {
+            String jsonResponse = "";
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+                URL url = new URL(params[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+
+                StringBuilder sb = new StringBuilder();
+                String line = "";
+
+                while((line = reader.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+
+                jsonResponse =  sb.toString();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return jsonResponse;
         }
 
         @Override
-        protected void onPostExecute(DetailParser parser) {
-            // get all fields needed to display
-            String synopsis = parser.parseSynopsis();
+        protected void onPostExecute(String jsonResponse) {
+            String score = "";
+            String ranked = "";
+            String popularity = "";
+            String type = "";
+            String status = "";
+            String aired = "";
+            String rating = "";
+            String episodes = "";
+            String duration = "";
+            String source = "";
+            String studios = "";
+            String genres = "";
+            String synopsis = "";
 
-            HashMap<String, String> info = parser.parseGeneralInfo();
-            String score = info.get("Score");
-            String ranked = info.get("Ranked");
-            String popularity = info.get("Popularity");
-            String type = info.get("Type");
-            String status = info.get("Status");
-            String aired = info.get("Aired");
-            String rating = info.get("Rating");
-            String episodes = info.get("Episodes");
-            String duration = info.get("Duration");
-            String source = info.get("Source");
-            String studios = info.get("Studios");
-            String genres = info.get("Genres");
+            // parse json data and assign into variables
+            try {
+                JSONObject details = new JSONObject(jsonResponse);
+                score = details.getString("score");
+                ranked = details.getString("ranked");
+                popularity = details.getString("popularity");
+                type = details.getString("media_type");
+                status = details.getString("status");
+                aired = details.getString("aired_on");
+                rating = details.getString("rating");
+                episodes = details.getString("episodes");
+                duration = details.getString("duration");
+                source = details.getString("source");
+                synopsis = details.getString("synopsis");
 
-            // set title to be "[__TYPE__] TITLE"
-            setTitle("[" + type + "] " + title);
+                setTitle("[" + type + "] " + title);
+
+                JSONArray studiosArray = details.getJSONArray("studios");
+                JSONArray genresArray = details.getJSONArray("genres");
+
+                // join strings in genre and studio list and remove double quotes
+                studios = studiosArray.join(", ").replace("\"", "");
+                genres = genresArray.join(", ").replace("\"", "");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             AnimeDetailActivity.this.summary = synopsis;
-
-            // modify the strings for score and ranked
-            score = score.split("\\*")[0];
-            ranked = ranked.split("\\*")[0];
             rating = RATING_MAP.get(rating);
+
+            if (studios.equals("")) {
+                studios = "Unknown";
+            }
+            if (genres.equals("")) {
+                genres = "Unknown";
+            }
 
             // set text for all the TextViews
             TextView titleTV = (TextView) findViewById(R.id.detail_title);

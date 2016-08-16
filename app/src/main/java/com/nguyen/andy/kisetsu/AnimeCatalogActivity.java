@@ -7,6 +7,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,14 +17,26 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import com.nguyen.andy.kisetsu.adapters.AnimeListAdapter;
 import com.nguyen.andy.kisetsu.parsers.AnimeCatalogParser;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class AnimeCatalogActivity extends AppCompatActivity {
     // constants
     private static final String MAL_PREFIX_URL = "http://myanimelist.net/anime/season/";
+    private static final String KISETSU_PREFIX = "http://kisetsu.pythonanywhere.com/season/";
     private static final String INTERNET_ERROR_MESSAGE = "No Internet Connection";
 
     // fields
@@ -52,7 +65,7 @@ public class AnimeCatalogActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.anime_toolbar);
         setSupportActionBar(toolbar);
 
-        String url = buildURL(season, year);
+        String url = buildKisetsuURL(season, year);
 
         // if connected to internet, start web scraping.
         // else, make toast
@@ -106,9 +119,24 @@ public class AnimeCatalogActivity extends AppCompatActivity {
         return url.toString();
     }
 
-    // AsyncTask dedicated to parsing the HTML
-    private class ParseURLTask extends AsyncTask<String, Void, AnimeCatalogParser> {
+    /**
+     * Builds the proper Kisetsu API endpoint given a season and year
+     * @param season the given season
+     * @param year the given year
+     * @return the endpoint
+     */
+    private String buildKisetsuURL(String season, int year) {
+        StringBuilder url = new StringBuilder();
+        url.append(KISETSU_PREFIX);
+        url.append(year);
+        url.append('/');
+        url.append(season.toLowerCase());
 
+        return url.toString();
+    }
+
+    // AsyncTask dedicated to parsing the HTML
+    private class ParseURLTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -122,13 +150,64 @@ public class AnimeCatalogActivity extends AppCompatActivity {
         }
 
         @Override
-        protected AnimeCatalogParser doInBackground(String... params) {
-            return new AnimeCatalogParser(params[0]);
+        protected String doInBackground(String... params) {
+            String jsonResponse = "";
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+                URL url = new URL(params[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+
+                StringBuilder sb = new StringBuilder();
+                String line = "";
+
+                while((line = reader.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+
+                jsonResponse =  sb.toString();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return jsonResponse;
         }
 
         @Override
-        protected void onPostExecute(AnimeCatalogParser parser) {
-            final ArrayList<AnimeItem> animeItems = parser.parseAnimeList();
+        protected void onPostExecute(String jsonResponse) {
+            ArrayList<AnimeItem> animeItems = new ArrayList<AnimeItem>();
+            try {
+                JSONArray animeList = new JSONArray(jsonResponse);
+                for (int i = 0; i < animeList.length(); i++) {
+                    JSONObject anime = animeList.getJSONObject(i);
+                    String title = anime.getString("title");
+                    String imgUrl = anime.getString("img_url");
+                    String malUrl = anime.getString("mal_url");
+
+                    animeItems.add(new AnimeItem(title, imgUrl, malUrl));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            /*final ArrayList<AnimeItem> animeItems = parser.parseAnimeList();*/
 
             // populate gridview with anime series
             animeGridView = (GridView) findViewById(R.id.anime_catalog);
@@ -148,22 +227,6 @@ public class AnimeCatalogActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-
-            /*/ initialize SearchView
-            searchView = (SearchView) findViewById(R.id.search);
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    return false;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    adapter.resetData();
-                    adapter.getFilter().filter(newText.toString());
-                    return false;
-                }
-            });*/
 
             progessDialog.dismiss();
         }
