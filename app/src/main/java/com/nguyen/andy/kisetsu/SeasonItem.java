@@ -30,7 +30,7 @@ public class SeasonItem {
         MONTH_TO_SEASON.put(9, FALL);
         MONTH_TO_SEASON.put(10, FALL);
         MONTH_TO_SEASON.put(11, FALL);
-        MONTH_TO_SEASON.put(12, WINTER);
+        MONTH_TO_SEASON.put(0, WINTER);
     }
 
     // fields
@@ -45,7 +45,7 @@ public class SeasonItem {
         this.year = year;
         this.season = MONTH_TO_SEASON.get(month);
 
-        // given the seasn, creates the name and timeframe of that season
+        // given the season, creates the name and timeframe of that season
         switch (this.season) {
             case SUMMER:
                 this.name = "Summer " + year;
@@ -97,7 +97,7 @@ public class SeasonItem {
         int prevSeasonMonth = this.month - SEASON_LENGTH;
         int prevSeasonYear = this.year;
 
-        if (prevSeasonMonth < 1) {
+        if (prevSeasonMonth < 0) {
             prevSeasonMonth += YEAR_LENGTH;
             prevSeasonYear--;
         }

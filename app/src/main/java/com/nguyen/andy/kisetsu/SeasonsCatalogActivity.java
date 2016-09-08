@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -68,14 +69,15 @@ public class SeasonsCatalogActivity extends AppCompatActivity {
 
         // Retrieve current month and year
         Calendar cal = Calendar.getInstance();
-        int month = cal.get(Calendar.MONTH) + 1;
+        int month = cal.get(Calendar.MONTH);
         int year = cal.get(Calendar.YEAR);
 
         // Calculate what the month/year will be in months
         int nextSeasonMonth = month + NUM_UPCOMING_SEASONS * SEASON_LENGTH;
         int nextSeasonYear = year;
 
-        if (nextSeasonMonth > YEAR_LENGTH) {
+        // >= instead of > since MAL counts December 20XX to be part of Winter (20XX + 1) season
+        if (nextSeasonMonth >= YEAR_LENGTH) {
             nextSeasonMonth = nextSeasonMonth % YEAR_LENGTH;
             nextSeasonYear++;
         }
@@ -85,6 +87,8 @@ public class SeasonsCatalogActivity extends AppCompatActivity {
         SeasonItem currSeason = new SeasonItem(nextSeasonMonth, nextSeasonYear);
         for (int i = 0; i < NUM_SEASONS; currSeason = currSeason.getPrevSeason(), i++) {
             seasons.add(currSeason);
+
+            Log.d("seasons", currSeason.toString());
         }
     }
 }
